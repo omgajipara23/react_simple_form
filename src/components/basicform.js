@@ -1,8 +1,16 @@
 import { useState } from 'react';
+import Step1 from './step1';
+import Step2 from './step2';
+import Step3 from './step3';
+import Step4 from './step4';
+import Step5 from './step5';
 import Button from 'react-bootstrap/Button';
 
 function BasicForm() {
 
+    const [error, setError] = useState({})
+
+    const [currentStep, setCurrentStep] = useState(1);
     const [values, setValues] = useState({
         firstname: "",
         lastname: "",
@@ -17,11 +25,11 @@ function BasicForm() {
         term: "off"
     })
 
-    const [document, setDocument] = useState({
-        adharcard: "",
-        passbook: "",
-        certificate: ""
-    })
+    const [document, setDocument] = useState([{
+        documentname: "",
+        documentfile: ""
+    }
+    ])
 
     const [education, setEducation] = useState([
         {
@@ -59,6 +67,13 @@ function BasicForm() {
         setAddress(add)
     }
 
+    function handleaddremove(event, index) {
+        let newform = [...education]
+        newform[index][event.target.name] = [event.target.value]
+
+        setEducation(newform)
+    }
+
     function addeducation() {
         const addEdu = {
             boardname: "",
@@ -86,6 +101,32 @@ function BasicForm() {
         setAddress(field)
     }
 
+    const next = () => {
+        var fieldError
+
+        switch (currentStep) {
+            case 1:
+                fieldError = step1Validation(values)
+                break;
+            case 2:
+                fieldError = Step2Validation(values)
+                break;
+            default:
+                break;
+        }
+
+        var length = Object.keys(fieldError).length;
+        if (length === 0) {
+            setCurrentStep(currentStep + 1);
+        } else {
+            setError(fieldError)
+        }
+    };
+    const back = () => {
+        setError({})
+        setCurrentStep(currentStep - 1);
+    };
+
     function handleinput(event) {
         const newobj = { ...values, [event.target.name]: event.target.value }
         setValues(newobj)
@@ -93,271 +134,197 @@ function BasicForm() {
 
     function formSubmit(e) {
         e.preventDefault()
-        console.log(values);
+        // console.log(values);
+    }
+
+    function fileHandel(event, index) {
+        let newform = [...education]
+        const file = event.target.files[0]
+        let setFile = newform.map((item, i) => {
+            if (i === index) {
+                return { ...item, result: file.name }
+            } else {
+                return { ...item }
+            }
+        })
+
+        setEducation(setFile)
+    }
+
+    function addDocument() {
+        const newDoc = {
+            documentname: "",
+            documentfile: ""
+        }
+        const docAdd = [...document, newDoc]
+        setDocument(docAdd)
+    }
+    // console.log(education);
+
+    function step1Validation(values) {
+        const error = {}
+        console.log(typeof (values.firstname, "++++++++++++++++++++++++++++++++++++++++++"));
+        if (values.firstname === "") {
+            error.firstname = " please enter firstname"
+        }
+        else if (values.firstname.match(/\d+/g)) {
+            error.firstname = "please Enter only char"
+        }
+        else if (values.firstname.length < 2) {
+            error.firstname = "please Enter atleast 2 char"
+        }
+        if (values.lastname === "") {
+            error.lastname = " please enter lastname"
+        }
+        else if (values.lastname.match(/\d+/g)) {
+            error.lastname = "please Enter only char"
+        }
+        else if (values.lastname.length < 2) {
+            error.lastname = "please Enter atleast 2 char"
+        }
+        const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if (values.email === "") {
+            error.email = "Please enter email"
+        } else if (!values.email.match(mailformat)) {
+            error.email = "Please enter valid email"
+        }
+        if (values.number === "") {
+            error.number = "Please enter the number"
+        } else if (values.number.length < 10 || values.number.length > 10) {
+            error.number = "Please enter valid number"
+        }
+        if (values.gender === "") {
+            error.gender = "Please fill gender"
+        }
+        return error
     }
 
 
-    return (
-        <>
-            <div className="container py-5" style={{ backgroundColor: 'cadetblue', width: '100%', marginTop: '0.5%', borderRadius: '30px' }}>
-                <h1 style={{ marginBottom: '2rem' }}>React Basic Form</h1>
+    function Step2Validation(values) {
+        const error = {}
+
+        if (values.bankname === "") {
+            error.bankname = "Please enter bank name"
+        } else if (values.bankname.match(/\d+/g)) {
+            error.bankname = "please Enter only char"
+        }
 
 
-                <form onSubmit={formSubmit}>
+        const IFSCFormate = /^[A-Z]{4}0[A-Z0-9]{6}$/
+        if (values.ifsc === "") {
+            error.ifsc = "Please enter IFSC code "
+        } else if (!values.ifsc.match(IFSCFormate)) {
+            error.ifsc = "Please enter valid IFSC code"
+        }
 
-                    <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-
-                        <div style={{ width: '45%' }}>
-                            <fieldset className="form-group border p-3" style={{ height: '100%' }}>
-                                <legend className="w-auto px-2">Basic Details</legend>
-                                <div style={{ marginBottom: '20px' }}>
-                                    <div className="form-group" style={{ marginBottom: '15px' }}>
-                                        <input type="text" className="form-control" placeholder='First Name' name='firstname' onChange={handleinput} />
-                                    </div>
-                                    <div className="form-group" style={{ marginBottom: '15px' }}>
-                                        <input type="text" className="form-control" placeholder='Last Name' name='lastname' onChange={handleinput} />
-                                    </div>
-                                    <div className="form-group" style={{ marginBottom: '15px' }}>
-                                        <input type="email" className="form-control" placeholder='Email' name='email' onChange={handleinput} />
-                                    </div>
-                                    <div className="form-group" style={{ marginBottom: '15px' }}>
-                                        <input type="number" className="form-control" placeholder='Phone Number' name='number' onChange={handleinput} />
-                                    </div>
-
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" value="male" id='male' name='gender' onChange={handleinput} />
-                                        <label className="form-check-label" htmlFor="male">male</label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" value="female" id='female' name='gender' onChange={handleinput} />
-                                        <label className="form-check-label" htmlFor="female">female</label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" value="other" id='other' name='gender' onChange={handleinput} />
-                                        <label className="form-check-label" htmlFor="other">other</label>
-                                    </div>
-                                    <br></br>
+        if (values.branch === "") {
+            error.branch = "Please enter branch name"
+        } else if (values.branch.match(/\d+/g)) {
+            error.branch = "please Enter only char"
+        }
 
 
-                                </div>
-                            </fieldset>
-                        </div>
+        const accountFormate = /^[0-9]{9,18}$”/
+        if (values.accountnumber === "") {
+            error.accountnumber = "Please enter account number"
+        } else if (values.accountnumber.match(accountFormate)) {
+            error.accountnumber = "Please enter valid account number"
+        }
+
+        return error
+    }
 
 
-                        <div style={{ width: '45%' }}>
-                            <fieldset className="form-group border p-3" style={{ height: '100%' }}>
-                                <legend className="w-auto px-2">Bank Details</legend>
-                                <div style={{ marginBottom: '20px' }}>
-                                    <div className="form-group" style={{ marginBottom: '15px' }}>
-                                        <input type="text" className="form-control" placeholder='Bank Name' name='bankname' onChange={handleinput} />
-                                    </div>
-                                    <div className="form-group" style={{ marginBottom: '15px' }}>
-                                        <input type="text" className="form-control" placeholder='IFSC Code' name='ifsc' onChange={handleinput} />
-                                    </div>
-                                    <div className="form-group" style={{ marginBottom: '15px' }}>
-                                        <input type="text" className="form-control" placeholder='Branch' name='branch' onChange={handleinput} />
-                                    </div>
-                                    <div className="form-group" style={{ marginBottom: '15px' }}>
-                                        <input type="number" className="form-control" placeholder='Account Number' name='accountnumber' onChange={handleinput} />
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </div>
+    switch (currentStep) {
+        case 1:
+            return (
+                <Step1
+                    data={values}
+                    formSubmit={formSubmit}
+                    handleinput={handleinput}
+                    error={error}
+                    next={next}
+                />
+            );
+        case 2:
+            return (
+                <Step2
+                    data={values}
+                    handleinput={handleinput}
+                    next={next}
+                    error={error}
+                    back={back}
+                />
+            );
+        case 3:
+            return (
+                <Step3
+                    data={education}
+                    addeducation={addeducation}
+                    removefield={removefield}
+                    handleinput={handleinput}
+                    handleaddremove={handleaddremove}
+                    fileHandel={fileHandel}
+                    next={next}
+                    back={back}
+                />
+            );
+        case 4:
+            return (
+                <Step4
+                    data={address}
+                    addAddress={addAddress}
+                    removeAddress={removeAddress}
+                    handleinput={handleinput}
+                    next={next}
+                    back={back}
+                />
+            );
+        case 5:
+            return (
+                <Step5
+                    data={document}
+                    addDocument={addDocument}
+                    handleinput={handleinput}
+                    next={next}
+                    back={back}
+                />
+            );
+        default:
+            return
+    }
 
-                    </div>
-
-                    <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '25px' }}>
-
-                        <div style={{ width: '45%' }}>
-                            <fieldset className="form-group border p-3" style={{ height: 'auto' }}>
-                                <legend className="w-auto px-2">Education Details</legend>
-                                {
-                                    education.map((item, index) => {
-                                        return (
-                                            <div style={{ marginBottom: '20px' }} key={index}>
-                                                <div className="form-group" style={{ marginBottom: '15px' }}>
-                                                    <input type="text" className="form-control" placeholder='Name Of Board' name='boardname' />
-                                                </div>
-                                                <div className="form-group" style={{ marginBottom: '15px' }}>
-                                                    <input type="text" className="form-control" placeholder='Name Of Course' name='coursename' />
-                                                </div>
-
-                                                <div style={{ display: 'flex' }}>
-                                                    <div className="form-group" style={{ marginBottom: '15px', width: '45%' }}>
-                                                        <input type="email" className="form-control" placeholder='Score' name='score' />
-                                                    </div>
-
-                                                    <div style={{ display: 'flex' }}>
-
-                                                        <label style={{ marginLeft: '14px' }}>Passing Year:</label>
-                                                        <div className="form-check form-check-inline">
-                                                            <select className="custom-select" name='passingyear'>
-
-                                                                <option value="2019">2019</option>
-                                                                <option value="2020">2020</option>
-                                                                <option value="2021">2021</option>
-                                                                <option value="2022">2022</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
+    // return (
+    //     <>
+    //         <div className="container py-5" style={{ backgroundColor: 'cadetblue', width: '100%', marginTop: '0.5%', borderRadius: '30px' }}>
+    //             <h1 style={{ marginBottom: '2rem' }}>React Basic Form</h1>
 
 
-                                                <div style={{ marginBottom: '10px' }}>
-                                                    <label style={{ float: 'left' }}>Language Of Course:</label>
-                                                    <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" value="english" id='english' name='language' />
-                                                        <label className="form-check-label" >English</label>
-                                                    </div>
-                                                    <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" value="hindi" id='hindi' name='language' />
-                                                        <label className="form-check-label" >Hindi</label>
-                                                    </div>
-                                                    <div className="form-check form-check-inline">
-                                                        <input className="form-check-input" type="radio" value="gujarati" id='gujarati' name='language' />
-                                                        <label className="form-check-label" >Gujarati</label>
-                                                    </div>
-                                                </div>
+    //             <form onSubmit={formSubmit}>
 
-                                                <div className="form-group" style={{ marginBottom: '15px', borderBottom: "1px solid", paddingBottom: '15px' }}>
-                                                    <label style={{ float: 'left' }}>Result:</label>
-                                                    <input type='file' name='result'></input>
-
-                                                    {index > 0 ? <Button variant="danger" onClick={() => removefield(index)}>
-                                                        Delete
-                                                    </Button> : null}
-                                                </div>
+    //                 <div style={{ display: 'flex', justifyContent: 'space-around' }}>
 
 
 
 
-                                            </div>
-                                        )
-                                    })
-                                }
-                                <div>
-                                    <Button variant="dark" style={{ marginBottom: '10px' }} onClick={addeducation} >
-                                        Add More
-                                    </Button>
-                                    <br></br>
-                                </div>
-                            </fieldset>
-                        </div>
-
-                        <div style={{ width: '45%' }}>
-                            <fieldset className="form-group border p-3" style={{ height: 'auto' }}>
-                                <legend className="w-auto px-2">Address Details</legend>
-                                {
-                                    address.map((item, index) => {
-                                        return (
-                                            <div style={{ marginBottom: '20px' }} key={index}>
-                                                <div className="form-group" style={{ marginBottom: '15px' }}>
-                                                    <input type="text" className="form-control" placeholder='Area' name='area' />
-                                                </div>
-                                                <div className="form-group" style={{ marginBottom: '15px' }}>
-                                                    <input type="text" className="form-control" placeholder='Street Name' name='streetname' />
-                                                </div>
-
-                                                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                    <div className="form-group" style={{ marginBottom: '15px', width: '49%' }}>
-                                                        <input type="email" className="form-control" placeholder='Landmark' name='landmark' />
-                                                    </div>
 
 
-                                                    <div className="form-group" style={{ marginBottom: '15px', width: '49%' }}>
-                                                        <input type="email" className="form-control" placeholder='Zipcode' name='zipcode' />
-                                                    </div>
-
-                                                </div>
-
-                                                <div style={{ marginBottom: '10px', borderBottom: '1px solid', paddingBottom: '15px' }}>
-                                                    <div style={{ display: 'flex' }}>
-
-                                                        <label style={{ marginLeft: '14px' }}>City:</label>
-                                                        <div className="form-check form-check-inline">
-                                                            <select className="custom-select" name='city'>
-                                                                <option value="Delhi">Rajkot</option>
-                                                                <option value="Punjab">Jamnagar</option>
-                                                                <option value="Jharkhand">Ahmedabad</option>
-                                                                <option value="Bihar">Surat</option>
-                                                            </select>
-                                                        </div>
+    //                 </div>
 
 
-                                                        <label style={{ marginLeft: '14px' }}>State:</label>
-                                                        <div className="form-check form-check-inline">
-                                                            <select className="custom-select" name='state'>
-                                                                <option value="Delhi">Delhi</option>
-                                                                <option value="Punjab">Punjab</option>
-                                                                <option value="Jharkhand">Gujarat</option>
-                                                                <option value="Bihar">Bihar</option>
-                                                            </select>
-                                                        </div>
-                                                        {index > 0 ? <Button variant="danger" onClick={() => removeAddress(index)}>
-                                                            Delete
-                                                        </Button> : null}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )
-                                    })
-                                }
-                                <div>
-                                    <Button variant="dark" style={{ marginBottom: '10px' }} onClick={addAddress}>
-                                        Add More
-                                    </Button>
-                                    <br></br>
-                                </div>
-                            </fieldset>
-                        </div>
 
-                    </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '25px' }}>
 
-                        <div style={{ width: '45%' }}>
-                            <fieldset className="form-group border p-3" style={{ height: '100%' }}>
-                                <legend className="w-auto px-2">Upload Documents</legend>
-                                <div className="form-group" style={{ marginBottom: '15px' }}>
-                                    <label style={{ float: 'left' }}>Adhar Card:</label>
-                                    <input type='file' name='adharcard'></input>
-                                </div>
 
-                                <div className="form-group" style={{ marginBottom: '15px' }}>
-                                    <label style={{ float: 'left' }}>Bank Passbook:</label>
-                                    <input type='file' name='passbook'></input>
-                                </div>
-
-                                <div className="form-group" style={{ marginBottom: '15px' }}>
-                                    <label style={{ float: 'left' }}>Leaving Certificate:</label>
-                                    <input type='file' name='certificate'></input>
-                                </div>
-
-                            </fieldset>
-                        </div>
-
-                    </div>
-                    <div style={{ marginTop: '10px' }}>
-                        <div className="form-check form-check-inline">
-                            <input className="form-check-input" type="checkbox" id="info" name='information' onChange={handleinput} />
-                            <label className="form-check-label" htmlFor="info">All Information Is Corract</label>
-                        </div>
-                        <div className="form-check form-check-inline">
-                            <input className="form-check-input" type="checkbox" id="terms" name='term' onChange={handleinput} />
-                            <label className="form-check-label" htmlFor="terms">I agree all terms and conditons</label>
-                        </div>
-                    </div>
-
-                    <div style={{ marginTop: '10px' }}>
-                        <Button variant="success" type="submit" id='btnSubmit'>
-                            Submit
-                        </Button>
-                    </div>
-                </form>
-            </div>
-        </>
-    )
+    //                 <div style={{ marginTop: '10px' }}>
+    //                     <Button variant="success" type="submit" id='btnSubmit'>
+    //                         Submit
+    //                     </Button>
+    //                 </div>
+    //             </form>
+    //         </div>
+    //     </>
+    // )
 }
 
 export default BasicForm
