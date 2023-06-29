@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 const Step1 = (props) => {
     const { data, handleinput, next, formSubmit, error } = props;
     return (
-        <form onSubmit={formSubmit}>
+        <form>
             <div className="container py-5" style={{ backgroundColor: 'cadetblue', width: '50%', marginTop: '0.5%', borderRadius: '30px' }}>
                 <h1 >React Multi Step Form</h1>
                 <div style={{ display: 'flex', justifyContent: 'space-around' }}>
@@ -39,15 +39,26 @@ const Step1 = (props) => {
                                 }
 
                                 <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="radio" value="male" id='male' name='gender' onChange={handleinput} />
+
+
+                                    <input className="form-check-input" type="radio" value="male" id='male' name='gender' onChange={handleinput} checked={data.gender === "male" ? true : false} />
+
+
                                     <label className="form-check-label" htmlFor="male">male</label>
                                 </div>
                                 <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="radio" value="female" id='female' name='gender' onChange={handleinput} />
+
+
+                                    <input className="form-check-input" type="radio" value="female" id='female' name='gender' onChange={handleinput} checked={data.gender === "female" ? true : false} />
+
+
                                     <label className="form-check-label" htmlFor="female">female</label>
                                 </div>
                                 <div className="form-check form-check-inline">
-                                    <input className="form-check-input" type="radio" value="other" id='other' name='gender' onChange={handleinput} />
+
+                                    <input className="form-check-input" type="radio" value="other" id='other' name='gender' onChange={handleinput} checked={data.gender === "other" ? true : false} />
+
+
                                     <label className="form-check-label" htmlFor="other">other</label>
                                 </div>
                                 {

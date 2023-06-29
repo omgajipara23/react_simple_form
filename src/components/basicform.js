@@ -5,12 +5,15 @@ import Step3 from './step3';
 import Step4 from './step4';
 import Step5 from './step5';
 import Button from 'react-bootstrap/Button';
+import Step6 from './step6';
 
 function BasicForm() {
 
     const [error, setError] = useState({})
 
+
     const [currentStep, setCurrentStep] = useState(1);
+
     const [values, setValues] = useState({
         firstname: "",
         lastname: "",
@@ -21,8 +24,6 @@ function BasicForm() {
         ifsc: "",
         branch: "",
         accountnumber: "",
-        information: "off",
-        term: "off"
     })
 
     const [document, setDocument] = useState([{
@@ -69,9 +70,34 @@ function BasicForm() {
 
     function handleaddremove(event, index) {
         let newform = [...education]
-        newform[index][event.target.name] = [event.target.value]
+        const demo = event.target.name.split('-')
+        newform[index][demo[0]] = [event.target.value]
 
         setEducation(newform)
+    }
+
+    function handleaddress(event, index) {
+        let newAddress = [...address]
+        newAddress[index][event.target.name] = [event.target.value]
+        setAddress(newAddress)
+    }
+
+    function fileValidation(event, index) {
+        let newDoc = [...document]
+        newDoc[index][event.target.name] = [event.target.value]
+
+        setDocument(newDoc)
+        console.log(document);
+
+    }
+
+    function demo(event, index) {
+
+        let test = [...document]
+        const file = event.target.files[0].type
+
+        test[index][event.target.name] = [event.target.files[0].name]
+        setDocument(test)
     }
 
     function addeducation() {
@@ -111,6 +137,12 @@ function BasicForm() {
             case 2:
                 fieldError = Step2Validation(values)
                 break;
+            case 3:
+                fieldError = Step3Validation()
+                break;
+            case 4:
+                fieldError = Step4Validation()
+                break;
             default:
                 break;
         }
@@ -121,11 +153,13 @@ function BasicForm() {
         } else {
             setError(fieldError)
         }
-    };
+
+    }
+
     const back = () => {
         setError({})
         setCurrentStep(currentStep - 1);
-    };
+    }
 
     function handleinput(event) {
         const newobj = { ...values, [event.target.name]: event.target.value }
@@ -133,8 +167,59 @@ function BasicForm() {
     }
 
     function formSubmit(e) {
+
         e.preventDefault()
-        // console.log(values);
+        document.map((item, index) => {
+
+            if (item.documentname === "") {
+                let documentNameMissing = [...document]
+                documentNameMissing[index].documentnameerror = "Please select document name"
+                setDocument(documentNameMissing)
+            } else {
+                let documentNameMissing1 = [...document]
+                documentNameMissing1[index].documentnameerror = ""
+                setDocument(documentNameMissing1)
+            }
+
+            if (item.documentfile.length > 0) {
+
+
+                const fileName = item.documentfile[0].split('.')
+                const extName = fileName[fileName.length - 1]
+
+                if (extName !== "jpeg" && extName !== "png") {
+                    let newDoc1 = [...document]
+                    newDoc1[index].fileerror = "Invalid document"
+                    setDocument(newDoc1)
+                }
+                else {
+                    let newDoc1 = [...document]
+                    newDoc1[index].fileerror = ""
+                    setDocument(newDoc1)
+                }
+
+            }
+            else {
+                let newDoc1 = [...document]
+                newDoc1[index].fileerror = "Please upload document"
+                setDocument(newDoc1)
+            }
+
+        })
+
+        document.map((item) => {
+            console.log(item.fileerror);
+            if (item.fileerror || item.documentnameerror) {
+                console.log("in iffffffff");
+                return false
+            }
+            else {
+                console.log("on elseeeeeeeeee");
+                setCurrentStep(6)
+            }
+        })
+
+        // localStorage.setItem('basicDetails', JSON.stringify(values))
     }
 
     function fileHandel(event, index) {
@@ -159,11 +244,9 @@ function BasicForm() {
         const docAdd = [...document, newDoc]
         setDocument(docAdd)
     }
-    // console.log(education);
 
     function step1Validation(values) {
         const error = {}
-        console.log(typeof (values.firstname, "++++++++++++++++++++++++++++++++++++++++++"));
         if (values.firstname === "") {
             error.firstname = " please enter firstname"
         }
@@ -199,10 +282,8 @@ function BasicForm() {
         return error
     }
 
-
     function Step2Validation(values) {
         const error = {}
-
         if (values.bankname === "") {
             error.bankname = "Please enter bank name"
         } else if (values.bankname.match(/\d+/g)) {
@@ -232,6 +313,154 @@ function BasicForm() {
         }
 
         return error
+    }
+
+    function Step3Validation() {
+        const error = {}
+
+        const data = [...education]
+        for (let i = 0; i < data.length; i++) {
+
+            const boardnameString = data[i].boardname.toString()
+
+
+            if (data[i].boardname === "") {
+                error.boardname = "Enter board name"
+                data[i].boradnamecheck = "Enter board name"
+            } else if (boardnameString.match(/\d+/g)) {
+                error.boardname = "please Enter only char"
+                data[i].boradnamecheck = "please Enter only char"
+            } else {
+                data[i].boradnamecheck = ""
+            }
+
+            const coursenameString = data[i].coursename.toString()
+
+            if (data[i].coursename === "") {
+                error.coursename = "Enter course name"
+                data[i].coursenamecheck = "Enter course name"
+            } else if (coursenameString.match(/\d+/g)) {
+                error.coursename = "please Enter only char"
+                data[i].coursenamecheck = "please Enter only char"
+            }
+            else {
+                data[i].coursenamecheck = ""
+            }
+
+            const scroeString = Number(data[i].score[0])
+
+
+            if (data[i].score === "") {
+                data[i].scorecheck = "Enter score"
+                error.score = "Enter score"
+            } else if (scroeString > 100 || scroeString < 10) {
+                data[i].scorecheck = "Enter valid score"
+                error.score = "Enter valid score"
+            } else {
+                data[i].scorecheck = ""
+            }
+
+            if (data[i].passingyear === "") {
+                data[i].passingyearcheck = "Enter passing year"
+                error.passingyear = "Enter passing year"
+            } else {
+                data[i].passingyearcheck = ""
+            }
+
+            if (data[i].language === "") {
+                data[i].languagecheck = "Fill language"
+                error.language = "Fill language"
+            } else {
+                data[i].languagecheck = ""
+            }
+
+            if (data[i].result === "") {
+                data[i].resultcheck = "Please upload result"
+                error.result = "Please upload result"
+            } else {
+                data[i].resultcheck = ""
+            }
+
+        }
+
+        setEducation(data)
+        return error
+    }
+
+    function Step4Validation() {
+        const error = {}
+
+        const alphaNumberic = /^[A-Za-z0-9]+$/;
+
+        const data = [...address]
+
+        for (let i = 0; i < data.length; i++) {
+
+            if (data[i].area == "") {
+                data[i].areacheck = "Please enter area"
+                error.area = "Please enter area"
+            } else if (!(data[i].area[0].match(alphaNumberic))) {
+                error.area = "Enter valid address"
+                data[i].areacheck = "Enter valid address"
+            }
+            else {
+                data[i].areacheck = ""
+            }
+
+            if (data[i].streetname == "") {
+                data[i].streetnamecheck = "Please enter streat name"
+                error.streetname = "Please enter streat name"
+            } else if (!(data[i].streetname[0].match(alphaNumberic))) {
+                error.streetname = "Enter valid streat name"
+                data[i].streetnamecheck = "Enter valid streat name"
+            }
+            else {
+                data[i].streetnamecheck = ""
+            }
+
+            if (data[i].landmark == "") {
+                data[i].landmarkcheck = "Please enter landmark"
+                error.landmark = "Please enter landmark"
+            } else if (!(data[i].landmark[0].match(alphaNumberic))) {
+                error.landmark = "Enter valid landmark"
+                data[i].landmarkcheck = "Enter valid landmark"
+            }
+            else {
+                data[i].landmarkcheck = ""
+            }
+
+            let regex = new RegExp(/^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/);
+
+            const zipcodeNumber = data[i].zipcode.toString()
+            if (data[i].zipcode === "") {
+                data[i].zipcodecheck = "Please enter zipcode"
+                error.zipcode = "Please enter zipcode"
+            } else if (regex.test(zipcodeNumber) == false) {
+                error.zipcode = "Enter valid zipcode"
+                data[i].zipcodecheck = "Enter valid zipcode"
+            }
+            else {
+                data[i].zipcodecheck = ""
+            }
+
+            if (data[i].city === "") {
+                error.city = "Please select city"
+                data[i].citycheck = "Please select city"
+            } else {
+                data[i].citycheck = ""
+            }
+
+            if (data[i].state === "") {
+                error.state = "Please select state"
+                data[i].statecheck = "Please select state"
+            } else {
+                data[i].statecheck = ""
+            }
+        }
+
+        setAddress(data)
+        return error
+
     }
 
 
@@ -278,6 +507,7 @@ function BasicForm() {
                     handleinput={handleinput}
                     next={next}
                     back={back}
+                    handleaddress={handleaddress}
                 />
             );
         case 5:
@@ -285,46 +515,19 @@ function BasicForm() {
                 <Step5
                     data={document}
                     addDocument={addDocument}
-                    handleinput={handleinput}
-                    next={next}
+                    fileValidation={fileValidation}
+                    demo={demo}
+                    next={formSubmit}
                     back={back}
                 />
             );
+        case 6:
+            return (
+                <Step6 />
+            )
         default:
             return
     }
-
-    // return (
-    //     <>
-    //         <div className="container py-5" style={{ backgroundColor: 'cadetblue', width: '100%', marginTop: '0.5%', borderRadius: '30px' }}>
-    //             <h1 style={{ marginBottom: '2rem' }}>React Basic Form</h1>
-
-
-    //             <form onSubmit={formSubmit}>
-
-    //                 <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-
-
-
-
-
-
-    //                 </div>
-
-
-
-
-
-
-    //                 <div style={{ marginTop: '10px' }}>
-    //                     <Button variant="success" type="submit" id='btnSubmit'>
-    //                         Submit
-    //                     </Button>
-    //                 </div>
-    //             </form>
-    //         </div>
-    //     </>
-    // )
 }
 
 export default BasicForm
