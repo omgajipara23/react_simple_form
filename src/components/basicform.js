@@ -249,70 +249,70 @@ function BasicForm() {
 
     function step1Validation(values) {
         const error = {}
-        // if (values.firstname === "") {
-        //     error.firstname = " please enter firstname"
-        // }
-        // else if (values.firstname.match(/\d+/g)) {
-        //     error.firstname = "please Enter only char"
-        // }
-        // else if (values.firstname.length < 2) {
-        //     error.firstname = "please Enter atleast 2 char"
-        // }
-        // if (values.lastname === "") {
-        //     error.lastname = " please enter lastname"
-        // }
-        // else if (values.lastname.match(/\d+/g)) {
-        //     error.lastname = "please Enter only char"
-        // }
-        // else if (values.lastname.length < 2) {
-        //     error.lastname = "please Enter atleast 2 char"
-        // }
-        // const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        // if (values.email === "") {
-        //     error.email = "Please enter email"
-        // } else if (!values.email.match(mailformat)) {
-        //     error.email = "Please enter valid email"
-        // }
-        // if (values.number === "") {
-        //     error.number = "Please enter the number"
-        // } else if (values.number.length < 10 || values.number.length > 10) {
-        //     error.number = "Please enter valid number"
-        // }
-        // if (values.gender === "") {
-        //     error.gender = "Please fill gender"
-        // }
+        if (values.firstname === "") {
+            error.firstname = " please enter firstname"
+        }
+        else if (values.firstname.match(/\d+/g)) {
+            error.firstname = "please Enter only char"
+        }
+        else if (values.firstname.length < 2) {
+            error.firstname = "please Enter atleast 2 char"
+        }
+        if (values.lastname === "") {
+            error.lastname = " please enter lastname"
+        }
+        else if (values.lastname.match(/\d+/g)) {
+            error.lastname = "please Enter only char"
+        }
+        else if (values.lastname.length < 2) {
+            error.lastname = "please Enter atleast 2 char"
+        }
+        const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if (values.email === "") {
+            error.email = "Please enter email"
+        } else if (!values.email.match(mailformat)) {
+            error.email = "Please enter valid email"
+        }
+        if (values.number === "") {
+            error.number = "Please enter the number"
+        } else if (values.number.length < 10 || values.number.length > 10) {
+            error.number = "Please enter valid number"
+        }
+        if (values.gender === "") {
+            error.gender = "Please fill gender"
+        }
         return error
     }
 
     function Step2Validation(values) {
         const error = {}
-        // if (values.bankname === "") {
-        //     error.bankname = "Please enter bank name"
-        // } else if (values.bankname.match(/\d+/g)) {
-        //     error.bankname = "please Enter only char"
-        // }
+        if (values.bankname === "") {
+            error.bankname = "Please enter bank name"
+        } else if (values.bankname.match(/\d+/g)) {
+            error.bankname = "please Enter only char"
+        }
 
 
-        // const IFSCFormate = /^[A-Z]{4}0[A-Z0-9]{6}$/
-        // if (values.ifsc === "") {
-        //     error.ifsc = "Please enter IFSC code "
-        // } else if (!values.ifsc.match(IFSCFormate)) {
-        //     error.ifsc = "Please enter valid IFSC code"
-        // }
+        const IFSCFormate = /^[A-Z]{4}0[A-Z0-9]{6}$/
+        if (values.ifsc === "") {
+            error.ifsc = "Please enter IFSC code "
+        } else if (!values.ifsc.match(IFSCFormate)) {
+            error.ifsc = "Please enter valid IFSC code"
+        }
 
-        // if (values.branch === "") {
-        //     error.branch = "Please enter branch name"
-        // } else if (values.branch.match(/\d+/g)) {
-        //     error.branch = "please Enter only char"
-        // }
+        if (values.branch === "") {
+            error.branch = "Please enter branch name"
+        } else if (values.branch.match(/\d+/g)) {
+            error.branch = "please Enter only char"
+        }
 
 
-        // const accountFormate = /^[0-9]{9,18}$”/
-        // if (values.accountnumber === "") {
-        //     error.accountnumber = "Please enter account number"
-        // } else if (values.accountnumber.match(accountFormate)) {
-        //     error.accountnumber = "Please enter valid account number"
-        // }
+        const accountFormate = /^[0-9]{9,18}$”/
+        if (values.accountnumber === "") {
+            error.accountnumber = "Please enter account number"
+        } else if (values.accountnumber.match(accountFormate)) {
+            error.accountnumber = "Please enter valid account number"
+        }
 
         return error
     }
