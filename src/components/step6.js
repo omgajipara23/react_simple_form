@@ -11,11 +11,11 @@ const Step6 = () => {
 
 
             {formsubmit ? <div>
-                < div class="card" >
+                < div className="card" >
                     <div>
                         <i className="checkmark">✓</i>
                     </div>
-                    <p>Your Response Has Been Recorded</p>
+                    <p style={{ fontSize: '20px' }}>Your Response Has Been Recorded</p>
                     <div>
                         <Button variant='dark' style={{ width: '30%' }} onClick={() => { setFormSubmit(false) }}>Submit Another Response</Button>
                     </div>
