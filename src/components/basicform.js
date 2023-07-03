@@ -11,6 +11,8 @@ function BasicForm() {
 
     const [error, setError] = useState({})
 
+    const [alldata, setAlldata] = useState([])
+
 
     const [currentStep, setCurrentStep] = useState(1);
 
@@ -219,9 +221,23 @@ function BasicForm() {
             }
         })
 
+        let allFormData = [{ basicDetails: values }, { allEducation: education }, { finalAddress: address }, { allDocument: document }]
 
-        localStorage.setItem('basicDetails', JSON.stringify(values))
-        localStorage.setItem('education', JSON.stringify(education))
+        var localData = JSON.parse(localStorage.getItem("userAllData") || "[]")
+
+        if (localData.length == 0) {
+            allFormData.push({ id: 1 })
+            localData.push(allFormData)
+            localStorage.setItem('userAllData', JSON.stringify(localData))
+
+        } else {
+            const id = localData[localData.length - 1][4].id
+            const updateId = id + 1
+            allFormData.push({ id: updateId })
+            localData.push(allFormData)
+            localStorage.setItem('userAllData', JSON.stringify(localData))
+        }
+
     }
 
     function fileHandel(event, index) {
@@ -249,70 +265,70 @@ function BasicForm() {
 
     function step1Validation(values) {
         const error = {}
-        if (values.firstname === "") {
-            error.firstname = " please enter firstname"
-        }
-        else if (values.firstname.match(/\d+/g)) {
-            error.firstname = "please Enter only char"
-        }
-        else if (values.firstname.length < 2) {
-            error.firstname = "please Enter atleast 2 char"
-        }
-        if (values.lastname === "") {
-            error.lastname = " please enter lastname"
-        }
-        else if (values.lastname.match(/\d+/g)) {
-            error.lastname = "please Enter only char"
-        }
-        else if (values.lastname.length < 2) {
-            error.lastname = "please Enter atleast 2 char"
-        }
-        const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        if (values.email === "") {
-            error.email = "Please enter email"
-        } else if (!values.email.match(mailformat)) {
-            error.email = "Please enter valid email"
-        }
-        if (values.number === "") {
-            error.number = "Please enter the number"
-        } else if (values.number.length < 10 || values.number.length > 10) {
-            error.number = "Please enter valid number"
-        }
-        if (values.gender === "") {
-            error.gender = "Please fill gender"
-        }
+        // if (values.firstname === "") {
+        //     error.firstname = " please enter firstname"
+        // }
+        // else if (values.firstname.match(/\d+/g)) {
+        //     error.firstname = "please Enter only char"
+        // }
+        // else if (values.firstname.length < 2) {
+        //     error.firstname = "please Enter atleast 2 char"
+        // }
+        // if (values.lastname === "") {
+        //     error.lastname = " please enter lastname"
+        // }
+        // else if (values.lastname.match(/\d+/g)) {
+        //     error.lastname = "please Enter only char"
+        // }
+        // else if (values.lastname.length < 2) {
+        //     error.lastname = "please Enter atleast 2 char"
+        // }
+        // const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        // if (values.email === "") {
+        //     error.email = "Please enter email"
+        // } else if (!values.email.match(mailformat)) {
+        //     error.email = "Please enter valid email"
+        // }
+        // if (values.number === "") {
+        //     error.number = "Please enter the number"
+        // } else if (values.number.length < 10 || values.number.length > 10) {
+        //     error.number = "Please enter valid number"
+        // }
+        // if (values.gender === "") {
+        //     error.gender = "Please fill gender"
+        // }
         return error
     }
 
     function Step2Validation(values) {
         const error = {}
-        if (values.bankname === "") {
-            error.bankname = "Please enter bank name"
-        } else if (values.bankname.match(/\d+/g)) {
-            error.bankname = "please Enter only char"
-        }
+        // if (values.bankname === "") {
+        //     error.bankname = "Please enter bank name"
+        // } else if (values.bankname.match(/\d+/g)) {
+        //     error.bankname = "please Enter only char"
+        // }
 
 
-        const IFSCFormate = /^[A-Z]{4}0[A-Z0-9]{6}$/
-        if (values.ifsc === "") {
-            error.ifsc = "Please enter IFSC code "
-        } else if (!values.ifsc.match(IFSCFormate)) {
-            error.ifsc = "Please enter valid IFSC code"
-        }
+        // const IFSCFormate = /^[A-Z]{4}0[A-Z0-9]{6}$/
+        // if (values.ifsc === "") {
+        //     error.ifsc = "Please enter IFSC code "
+        // } else if (!values.ifsc.match(IFSCFormate)) {
+        //     error.ifsc = "Please enter valid IFSC code"
+        // }
 
-        if (values.branch === "") {
-            error.branch = "Please enter branch name"
-        } else if (values.branch.match(/\d+/g)) {
-            error.branch = "please Enter only char"
-        }
+        // if (values.branch === "") {
+        //     error.branch = "Please enter branch name"
+        // } else if (values.branch.match(/\d+/g)) {
+        //     error.branch = "please Enter only char"
+        // }
 
 
-        const accountFormate = /^[0-9]{9,18}$”/
-        if (values.accountnumber === "") {
-            error.accountnumber = "Please enter account number"
-        } else if (values.accountnumber.match(accountFormate)) {
-            error.accountnumber = "Please enter valid account number"
-        }
+        // const accountFormate = /^[0-9]{9,18}$”/
+        // if (values.accountnumber === "") {
+        //     error.accountnumber = "Please enter account number"
+        // } else if (values.accountnumber.match(accountFormate)) {
+        //     error.accountnumber = "Please enter valid account number"
+        // }
 
         return error
     }
@@ -320,147 +336,147 @@ function BasicForm() {
     function Step3Validation() {
         const error = {}
 
-        const data = [...education]
-        for (let i = 0; i < data.length; i++) {
+        // const data = [...education]
+        // for (let i = 0; i < data.length; i++) {
 
-            const boardnameString = data[i].boardname.toString()
-
-
-            if (data[i].boardname === "") {
-                error.boardname = "Enter board name"
-                data[i].boradnamecheck = "Enter board name"
-            } else if (boardnameString.match(/\d+/g)) {
-                error.boardname = "please Enter only char"
-                data[i].boradnamecheck = "please Enter only char"
-            } else {
-                data[i].boradnamecheck = ""
-            }
-
-            const coursenameString = data[i].coursename.toString()
-
-            if (data[i].coursename === "") {
-                error.coursename = "Enter course name"
-                data[i].coursenamecheck = "Enter course name"
-            } else if (coursenameString.match(/\d+/g)) {
-                error.coursename = "please Enter only char"
-                data[i].coursenamecheck = "please Enter only char"
-            }
-            else {
-                data[i].coursenamecheck = ""
-            }
-
-            const scroeString = Number(data[i].score[0])
+        //     const boardnameString = data[i].boardname.toString()
 
 
-            if (data[i].score === "") {
-                data[i].scorecheck = "Enter score"
-                error.score = "Enter score"
-            } else if (scroeString > 100 || scroeString < 10) {
-                data[i].scorecheck = "Enter valid score"
-                error.score = "Enter valid score"
-            } else {
-                data[i].scorecheck = ""
-            }
+        //     if (data[i].boardname === "") {
+        //         error.boardname = "Enter board name"
+        //         data[i].boradnamecheck = "Enter board name"
+        //     } else if (boardnameString.match(/\d+/g)) {
+        //         error.boardname = "please Enter only char"
+        //         data[i].boradnamecheck = "please Enter only char"
+        //     } else {
+        //         data[i].boradnamecheck = ""
+        //     }
 
-            if (data[i].passingyear === "") {
-                data[i].passingyearcheck = "Enter passing year"
-                error.passingyear = "Enter passing year"
-            } else {
-                data[i].passingyearcheck = ""
-            }
+        //     const coursenameString = data[i].coursename.toString()
 
-            if (data[i].language === "") {
-                data[i].languagecheck = "Fill language"
-                error.language = "Fill language"
-            } else {
-                data[i].languagecheck = ""
-            }
+        //     if (data[i].coursename === "") {
+        //         error.coursename = "Enter course name"
+        //         data[i].coursenamecheck = "Enter course name"
+        //     } else if (coursenameString.match(/\d+/g)) {
+        //         error.coursename = "please Enter only char"
+        //         data[i].coursenamecheck = "please Enter only char"
+        //     }
+        //     else {
+        //         data[i].coursenamecheck = ""
+        //     }
 
-            if (data[i].result === "") {
-                data[i].resultcheck = "Please upload result"
-                error.result = "Please upload result"
-            } else {
-                data[i].resultcheck = ""
-            }
+        //     const scroeString = Number(data[i].score[0])
 
-        }
 
-        setEducation(data)
+        //     if (data[i].score === "") {
+        //         data[i].scorecheck = "Enter score"
+        //         error.score = "Enter score"
+        //     } else if (scroeString > 100 || scroeString < 10) {
+        //         data[i].scorecheck = "Enter valid score"
+        //         error.score = "Enter valid score"
+        //     } else {
+        //         data[i].scorecheck = ""
+        //     }
+
+        //     if (data[i].passingyear === "") {
+        //         data[i].passingyearcheck = "Enter passing year"
+        //         error.passingyear = "Enter passing year"
+        //     } else {
+        //         data[i].passingyearcheck = ""
+        //     }
+
+        //     if (data[i].language === "") {
+        //         data[i].languagecheck = "Fill language"
+        //         error.language = "Fill language"
+        //     } else {
+        //         data[i].languagecheck = ""
+        //     }
+
+        //     if (data[i].result === "") {
+        //         data[i].resultcheck = "Please upload result"
+        //         error.result = "Please upload result"
+        //     } else {
+        //         data[i].resultcheck = ""
+        //     }
+
+        // }
+
+        // setEducation(data)
         return error
     }
 
     function Step4Validation() {
         const error = {}
 
-        const alphaNumberic = /^[A-Za-z0-9]+$/;
+        // const alphaNumberic = /^[A-Za-z0-9]+$/;
 
-        const data = [...address]
+        // const data = [...address]
 
-        for (let i = 0; i < data.length; i++) {
+        // for (let i = 0; i < data.length; i++) {
 
-            if (data[i].area == "") {
-                data[i].areacheck = "Please enter area"
-                error.area = "Please enter area"
-            } else if (!(data[i].area[0].match(alphaNumberic))) {
-                error.area = "Enter valid address"
-                data[i].areacheck = "Enter valid address"
-            }
-            else {
-                data[i].areacheck = ""
-            }
+        //     if (data[i].area == "") {
+        //         data[i].areacheck = "Please enter area"
+        //         error.area = "Please enter area"
+        //     } else if (!(data[i].area[0].match(alphaNumberic))) {
+        //         error.area = "Enter valid address"
+        //         data[i].areacheck = "Enter valid address"
+        //     }
+        //     else {
+        //         data[i].areacheck = ""
+        //     }
 
-            if (data[i].streetname == "") {
-                data[i].streetnamecheck = "Please enter streat name"
-                error.streetname = "Please enter streat name"
-            } else if (!(data[i].streetname[0].match(alphaNumberic))) {
-                error.streetname = "Enter valid streat name"
-                data[i].streetnamecheck = "Enter valid streat name"
-            }
-            else {
-                data[i].streetnamecheck = ""
-            }
+        //     if (data[i].streetname == "") {
+        //         data[i].streetnamecheck = "Please enter streat name"
+        //         error.streetname = "Please enter streat name"
+        //     } else if (!(data[i].streetname[0].match(alphaNumberic))) {
+        //         error.streetname = "Enter valid streat name"
+        //         data[i].streetnamecheck = "Enter valid streat name"
+        //     }
+        //     else {
+        //         data[i].streetnamecheck = ""
+        //     }
 
-            if (data[i].landmark == "") {
-                data[i].landmarkcheck = "Please enter landmark"
-                error.landmark = "Please enter landmark"
-            } else if (!(data[i].landmark[0].match(alphaNumberic))) {
-                error.landmark = "Enter valid landmark"
-                data[i].landmarkcheck = "Enter valid landmark"
-            }
-            else {
-                data[i].landmarkcheck = ""
-            }
+        //     if (data[i].landmark == "") {
+        //         data[i].landmarkcheck = "Please enter landmark"
+        //         error.landmark = "Please enter landmark"
+        //     } else if (!(data[i].landmark[0].match(alphaNumberic))) {
+        //         error.landmark = "Enter valid landmark"
+        //         data[i].landmarkcheck = "Enter valid landmark"
+        //     }
+        //     else {
+        //         data[i].landmarkcheck = ""
+        //     }
 
-            let regex = new RegExp(/^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/);
+        //     let regex = new RegExp(/^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/);
 
-            const zipcodeNumber = data[i].zipcode.toString()
-            if (data[i].zipcode === "") {
-                data[i].zipcodecheck = "Please enter zipcode"
-                error.zipcode = "Please enter zipcode"
-            } else if (regex.test(zipcodeNumber) == false) {
-                error.zipcode = "Enter valid zipcode"
-                data[i].zipcodecheck = "Enter valid zipcode"
-            }
-            else {
-                data[i].zipcodecheck = ""
-            }
+        //     const zipcodeNumber = data[i].zipcode.toString()
+        //     if (data[i].zipcode === "") {
+        //         data[i].zipcodecheck = "Please enter zipcode"
+        //         error.zipcode = "Please enter zipcode"
+        //     } else if (regex.test(zipcodeNumber) == false) {
+        //         error.zipcode = "Enter valid zipcode"
+        //         data[i].zipcodecheck = "Enter valid zipcode"
+        //     }
+        //     else {
+        //         data[i].zipcodecheck = ""
+        //     }
 
-            if (data[i].city === "") {
-                error.city = "Please select city"
-                data[i].citycheck = "Please select city"
-            } else {
-                data[i].citycheck = ""
-            }
+        //     if (data[i].city === "") {
+        //         error.city = "Please select city"
+        //         data[i].citycheck = "Please select city"
+        //     } else {
+        //         data[i].citycheck = ""
+        //     }
 
-            if (data[i].state === "") {
-                error.state = "Please select state"
-                data[i].statecheck = "Please select state"
-            } else {
-                data[i].statecheck = ""
-            }
-        }
+        //     if (data[i].state === "") {
+        //         error.state = "Please select state"
+        //         data[i].statecheck = "Please select state"
+        //     } else {
+        //         data[i].statecheck = ""
+        //     }
+        // }
 
-        setAddress(data)
+        // setAddress(data)
         return error
 
     }
