@@ -4,7 +4,6 @@ import Step2 from './step2';
 import Step3 from './step3';
 import Step4 from './step4';
 import Step5 from './step5';
-import Button from 'react-bootstrap/Button';
 import Step6 from './step6';
 
 function BasicForm() {
@@ -89,18 +88,29 @@ function BasicForm() {
         newDoc[index][event.target.name] = [event.target.value]
 
         setDocument(newDoc)
-        console.log(document);
-
+        // console.log(document);
     }
 
-    function demo(event, index) {
+    const getBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = (error) => reject(error);
+            reader.readAsDataURL(file);
+        });
+    };
+
+    async function demo(event, index) {
 
         let test = [...document]
-        const file = event.target.files[0].type
+        const file = event.target.files[0]
 
-        test[index][event.target.name] = [event.target.files[0].name]
+        const baseImage = await getBase64(file)
+
+        test[index][event.target.name] = [baseImage]
         setDocument(test)
     }
+
 
     function addeducation() {
         const addEdu = {
@@ -185,11 +195,20 @@ function BasicForm() {
 
             if (item.documentfile.length > 0) {
 
+                var str = item.documentfile[0];
+                var patternArr = ['data:image/jpeg', 'data:image/png'];
 
-                const fileName = item.documentfile[0].split('.')
-                const extName = fileName[fileName.length - 1]
+                function contains(target, pattern) {
+                    var value = 0;
+                    pattern.forEach(function (word) {
+                        value = value + target.includes(word);
+                    });
+                    return (value === 1)
+                }
 
-                if (extName !== "jpeg" && extName !== "png") {
+                const fileIsValidOrNot = contains(str, patternArr)
+
+                if (fileIsValidOrNot === false) {
                     let newDoc1 = [...document]
                     newDoc1[index].fileerror = "Invalid document"
                     setDocument(newDoc1)
@@ -210,7 +229,8 @@ function BasicForm() {
         })
 
         document.map((item) => {
-            console.log(item.fileerror);
+
+
             if (item.fileerror || item.documentnameerror) {
                 console.log("in iffffffff");
                 return false

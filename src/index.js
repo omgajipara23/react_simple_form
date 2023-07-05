@@ -4,6 +4,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../src/css/style.css'
+import '../src/fonts/icomoon/style.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
