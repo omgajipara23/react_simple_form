@@ -1,8 +1,8 @@
+import { logDOM } from "@testing-library/react";
 import { useEffect, useState } from "react"
+import { Button } from "react-bootstrap";
 
 const ListingTable = () => {
-
-
 
     const [data, setData] = useState([])
 
@@ -11,6 +11,19 @@ const ListingTable = () => {
         const parseData = JSON.parse(localStorageData)
         setData(parseData)
     }, []);
+
+    function removeElement(i) {
+        const getAllDataFromLocal = JSON.parse(localStorage.getItem('userAllData'))
+        const remove = getAllDataFromLocal.splice(i, 1)
+        localStorage.setItem('userAllData', JSON.stringify(getAllDataFromLocal))
+        setData(getAllDataFromLocal)
+    }
+
+    function editElement(i) {
+        const getAllDataFromLocal = JSON.parse(localStorage.getItem('userAllData'))
+        const edit = getAllDataFromLocal.splice(i, 1)
+        console.log(edit);
+    }
 
     return (
         <>
@@ -29,6 +42,8 @@ const ListingTable = () => {
                                     <th scope="col" style={{ color: 'black' }}>Email</th>
                                     <th scope="col" style={{ color: 'black' }}>Gender</th>
                                     <th scope="col" style={{ color: 'black' }}>Document</th>
+                                    <th scope="col" style={{ color: 'black' }}>Delete</th>
+                                    <th scope="col" style={{ color: 'black' }}>Edit</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -37,7 +52,7 @@ const ListingTable = () => {
                                 <tr className="spacer"><td colSpan="100"></td></tr>
                                 {
                                     data.map((item, index) => {
-                                        console.log(item[3].allDocument[0].documentfile[0], "iteammmmmmmmmm");
+
                                         return (
 
                                             < tr key={index}>
@@ -52,6 +67,14 @@ const ListingTable = () => {
                                                     <div style={{ height: '100%', width: '100%' }}>
                                                         <img src={item[3].allDocument[0].documentfile[0]} style={{ height: '100px' }} />
                                                     </div>
+                                                </td>
+
+                                                <td>
+                                                    <Button onClick={() => removeElement(index)}>Delete</Button>
+                                                </td>
+
+                                                <td>
+                                                    <Button onClick={() => editElement(index)}>Edit</Button>
                                                 </td>
                                             </tr>
 

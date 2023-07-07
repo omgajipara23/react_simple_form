@@ -7,6 +7,7 @@ import ListingTable from './components/listingTable';
 function App() {
   return (
     <div className="App">
+
       {/* <BasicForm /> */}
       <ListingTable />
     </div>
