@@ -5,8 +5,13 @@ import Step3 from './step3';
 import Step4 from './step4';
 import Step5 from './step5';
 import Step6 from './step6';
+import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
 
-function BasicForm() {
+function BasicForm(props) {
+    let { id } = useParams();
+    let { isView } = props
+
 
     const [error, setError] = useState({})
 
@@ -54,6 +59,20 @@ function BasicForm() {
             state: ""
         }
     ])
+
+
+    useEffect(() => {
+
+        if (id != undefined) {
+            const getAllDataFromLocal = JSON.parse(localStorage.getItem('userAllData'))
+            const edit = getAllDataFromLocal.splice(id, 1)
+            setValues(edit[0][0].basicDetails)
+            setEducation(edit[0][1].allEducation)
+            setAddress(edit[0][2].finalAddress)
+            setDocument(edit[0][3].allDocument)
+
+        }
+    }, [])
 
     function addAddress() {
         const addField = {
@@ -180,6 +199,8 @@ function BasicForm() {
 
     function formSubmit(e) {
 
+        let flag = true
+
         e.preventDefault()
         document.map((item, index) => {
 
@@ -233,29 +254,47 @@ function BasicForm() {
 
             if (item.fileerror || item.documentnameerror) {
                 console.log("in iffffffff");
-                return false
+                flag = false
+
             }
             else {
                 console.log("on elseeeeeeeeee");
-                setCurrentStep(6)
             }
         })
+
+        if (flag) {
+            setCurrentStep(6)
+        }
+
 
         let allFormData = [{ basicDetails: values }, { allEducation: education }, { finalAddress: address }, { allDocument: document }]
 
         var localData = JSON.parse(localStorage.getItem("userAllData") || "[]")
 
         if (localData.length == 0) {
-            allFormData.push({ id: 1 })
+            // allFormData.push({ id: 1 })
             localData.push(allFormData)
             localStorage.setItem('userAllData', JSON.stringify(localData))
 
         } else {
-            const id = localData[localData.length - 1][4].id
-            const updateId = id + 1
-            allFormData.push({ id: updateId })
-            localData.push(allFormData)
-            localStorage.setItem('userAllData', JSON.stringify(localData))
+            // const id = localData[localData.length - 1][4].id
+            // const updateId = id + 1
+            // allFormData.push({ id: updateId })
+            console.log(id, "===================================================");
+
+            console.log(allFormData, "formdataaaaaaaaaaaaa");
+            console.log(JSON.parse(localStorage.getItem('userAllData')).splice(id, 1));
+            console.log(JSON.parse(localStorage.getItem('userAllData')), "in locallllllllllll");
+
+            if (id) {
+
+                localData.splice(id, 1, allFormData)
+                localStorage.setItem('userAllData', JSON.stringify(localData))
+            } else {
+                localData.push(allFormData)
+                localStorage.setItem('userAllData', JSON.stringify(localData))
+            }
+
         }
 
     }
@@ -502,6 +541,14 @@ function BasicForm() {
     }
 
 
+    function changeImage(index) {
+        const updateDocument = [...document]
+        updateDocument[index].documentfile = ""
+        setDocument(updateDocument)
+
+    }
+
+
     switch (currentStep) {
         case 1:
             return (
@@ -511,6 +558,7 @@ function BasicForm() {
                     handleinput={handleinput}
                     error={error}
                     next={next}
+                    viewdisable={isView}
                 />
             );
         case 2:
@@ -521,6 +569,7 @@ function BasicForm() {
                     next={next}
                     error={error}
                     back={back}
+                    viewdisable={isView}
                 />
             );
         case 3:
@@ -534,6 +583,7 @@ function BasicForm() {
                     fileHandel={fileHandel}
                     next={next}
                     back={back}
+                    viewdisable={isView}
                 />
             );
         case 4:
@@ -546,6 +596,7 @@ function BasicForm() {
                     next={next}
                     back={back}
                     handleaddress={handleaddress}
+                    viewdisable={isView}
                 />
             );
         case 5:
@@ -557,6 +608,8 @@ function BasicForm() {
                     demo={demo}
                     next={formSubmit}
                     back={back}
+                    changeImage={changeImage}
+                    viewdisable={isView}
                 />
             );
         case 6:

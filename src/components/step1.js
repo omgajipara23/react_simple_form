@@ -1,7 +1,8 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 const Step1 = (props) => {
-    const { data, handleinput, next, formSubmit, error } = props;
+    const { data, handleinput, next, formSubmit, error, viewdisable } = props;
+
     return (
         <form>
             <div className="container py-5" style={{ backgroundColor: 'cadetblue', width: '50%', marginTop: '0.5%', borderRadius: '30px' }}>
@@ -12,26 +13,26 @@ const Step1 = (props) => {
                             <legend className="w-auto px-2">Basic Details</legend>
                             <div style={{ marginBottom: '20px' }}>
                                 <div className="form-group" style={{ marginBottom: '15px' }}>
-                                    <input type="text" className="form-control" placeholder='First Name' name='firstname' value={data.firstname} onChange={handleinput} />
+                                    <input type="text" className="form-control" placeholder='First Name' name='firstname' value={data.firstname} onChange={handleinput} disabled={viewdisable ? true : false} />
                                 </div>
 
                                 {
                                     error.firstname ? <p style={{ color: 'red' }}>{error.firstname}</p> : null
                                 }
                                 <div className="form-group" style={{ marginBottom: '15px' }}>
-                                    <input type="text" className="form-control" placeholder='Last Name' name='lastname' onChange={handleinput} value={data.lastname} />
+                                    <input type="text" className="form-control" placeholder='Last Name' name='lastname' onChange={handleinput} value={data.lastname} disabled={viewdisable ? true : false} />
                                 </div>
                                 {
                                     error.lastname ? <p style={{ color: 'red' }}>{error.lastname}</p> : null
                                 }
                                 <div className="form-group" style={{ marginBottom: '15px' }}>
-                                    <input type="email" className="form-control" placeholder='Email' name='email' onChange={handleinput} value={data.email} />
+                                    <input type="email" className="form-control" placeholder='Email' name='email' onChange={handleinput} value={data.email} disabled={viewdisable ? true : false} />
                                 </div>
                                 {
                                     error.email ? <p style={{ color: 'red' }}>{error.email}</p> : null
                                 }
                                 <div className="form-group" style={{ marginBottom: '15px' }}>
-                                    <input type="number" className="form-control" placeholder='Phone Number' name='number' onChange={handleinput} value={data.number} />
+                                    <input type="number" className="form-control" placeholder='Phone Number' name='number' onChange={handleinput} value={data.number} disabled={viewdisable ? true : false} />
                                 </div>
 
                                 {
@@ -41,7 +42,7 @@ const Step1 = (props) => {
                                 <div className="form-check form-check-inline">
 
 
-                                    <input className="form-check-input" type="radio" value="male" id='male' name='gender' onChange={handleinput} checked={data.gender === "male" ? true : false} />
+                                    <input className="form-check-input" type="radio" value="male" id='male' name='gender' onChange={handleinput} checked={data.gender === "male" ? true : false} disabled={viewdisable ? true : false} />
 
 
                                     <label className="form-check-label" htmlFor="male">male</label>
@@ -49,14 +50,14 @@ const Step1 = (props) => {
                                 <div className="form-check form-check-inline">
 
 
-                                    <input className="form-check-input" type="radio" value="female" id='female' name='gender' onChange={handleinput} checked={data.gender === "female" ? true : false} />
+                                    <input className="form-check-input" type="radio" value="female" id='female' name='gender' onChange={handleinput} checked={data.gender === "female" ? true : false} disabled={viewdisable ? true : false} />
 
 
                                     <label className="form-check-label" htmlFor="female">female</label>
                                 </div>
                                 <div className="form-check form-check-inline">
 
-                                    <input className="form-check-input" type="radio" value="other" id='other' name='gender' onChange={handleinput} checked={data.gender === "other" ? true : false} />
+                                    <input className="form-check-input" type="radio" value="other" id='other' name='gender' onChange={handleinput} checked={data.gender === "other" ? true : false} disabled={viewdisable ? true : false} />
 
 
                                     <label className="form-check-label" htmlFor="other">other</label>

@@ -1,9 +1,11 @@
 import { logDOM } from "@testing-library/react";
 import { useEffect, useState } from "react"
-import { Button } from "react-bootstrap";
+import { Button, Pagination } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const ListingTable = () => {
 
+    const navigate = useNavigate();
     const [data, setData] = useState([])
 
     useEffect(() => {
@@ -20,19 +22,62 @@ const ListingTable = () => {
     }
 
     function editElement(i) {
-        const getAllDataFromLocal = JSON.parse(localStorage.getItem('userAllData'))
-        const edit = getAllDataFromLocal.splice(i, 1)
-        console.log(edit);
+
+        navigate(`/form/edit/${i}`)
+    }
+
+    function viewElement(i) {
+        navigate(`/form/view/${i}`)
+    }
+
+    function pagination() {
+        let active = 2;
+        let items = [];
+        for (let number = 1; number <= 5; number++) {
+            items.push(
+                <Pagination.Item key={number} active={number === active}>
+                    {number}
+                </Pagination.Item>,
+            );
+        }
+        return items
+        console.log(items);
+    }
+
+
+    function searchValueFunction(event) {
+
+
+
+        const localStorageData = JSON.parse(localStorage.getItem('userAllData'))
+        if (event.target.value == "") {
+            setData(localStorageData)
+        }
+        else {
+            const filterArray = localStorageData.filter(check)
+
+            function check(item) {
+                return (event.target.value.toLowerCase().includes(item[0].basicDetails.firstname.toLowerCase()) || event.target.value.toLowerCase().includes(item[0].basicDetails.lastname.toLowerCase()))
+            }
+            setData(filterArray)
+            console.log(filterArray);
+        }
+
+
     }
 
     return (
         <>
             <div className="content">
 
-                <div className="container">
+                <div className="container" style={{ maxWidth: '1225px' }}>
 
 
                     <div className="table-responsive custom-table-responsive">
+
+                        <div style={{ marginBottom: '28px' }}>
+                            <input id="search" type="search" placeholder="Search..." autoFocus style={{ padding: '6px', borderRadius: '12px' }} onChange={(e) => searchValueFunction(e)} />
+                        </div>
 
                         <table className="table custom-table">
                             <thead>
@@ -44,6 +89,7 @@ const ListingTable = () => {
                                     <th scope="col" style={{ color: 'black' }}>Document</th>
                                     <th scope="col" style={{ color: 'black' }}>Delete</th>
                                     <th scope="col" style={{ color: 'black' }}>Edit</th>
+                                    <th scope="col" style={{ color: 'black' }}>View</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -76,6 +122,10 @@ const ListingTable = () => {
                                                 <td>
                                                     <Button onClick={() => editElement(index)}>Edit</Button>
                                                 </td>
+
+                                                <td>
+                                                    <Button onClick={() => viewElement(index)}>View</Button>
+                                                </td>
                                             </tr>
 
 
@@ -88,6 +138,9 @@ const ListingTable = () => {
 
                             </tbody>
                         </table>
+                        <div>
+                            <Pagination>{pagination()}</Pagination>
+                        </div>
                     </div>
 
 

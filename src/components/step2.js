@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 const Step2 = (props) => {
-    const { data, handleinput, next, back, error } = props;
+    const { data, handleinput, next, back, error, viewdisable } = props;
     return (
         <form>
 
@@ -13,25 +13,25 @@ const Step2 = (props) => {
                             <legend className="w-auto px-2">Bank Details</legend>
                             <div style={{ marginBottom: '20px' }}>
                                 <div className="form-group" style={{ marginBottom: '15px' }}>
-                                    <input type="text" className="form-control" placeholder='Bank Name' value={data.bankname} name='bankname' onChange={handleinput} />
+                                    <input type="text" className="form-control" placeholder='Bank Name' value={data.bankname} name='bankname' onChange={handleinput} disabled={viewdisable ? true : false} />
                                 </div>
                                 {
                                     error.bankname ? <p style={{ color: 'red' }}>{error.bankname}</p> : null
                                 }
                                 <div className="form-group" style={{ marginBottom: '15px' }}>
-                                    <input type="text" className="form-control" placeholder='IFSC Code' name='ifsc' onChange={handleinput} value={data.ifsc} />
+                                    <input type="text" className="form-control" placeholder='IFSC Code' name='ifsc' onChange={handleinput} value={data.ifsc} disabled={viewdisable ? true : false} />
                                 </div>
                                 {
                                     error.ifsc ? <p style={{ color: 'red' }}>{error.ifsc}</p> : null
                                 }
                                 <div className="form-group" style={{ marginBottom: '15px' }}>
-                                    <input type="text" className="form-control" placeholder='Branch' name='branch' onChange={handleinput} value={data.branch} />
+                                    <input type="text" className="form-control" placeholder='Branch' name='branch' onChange={handleinput} value={data.branch} disabled={viewdisable ? true : false} />
                                 </div>
                                 {
                                     error.branch ? <p style={{ color: 'red' }}>{error.branch}</p> : null
                                 }
                                 <div className="form-group" style={{ marginBottom: '15px' }}>
-                                    <input type="number" className="form-control" placeholder='Account Number' name='accountnumber' onChange={handleinput} value={data.accountnumber} />
+                                    <input type="number" className="form-control" placeholder='Account Number' name='accountnumber' onChange={handleinput} value={data.accountnumber} disabled={viewdisable ? true : false} />
                                 </div>
 
                                 {

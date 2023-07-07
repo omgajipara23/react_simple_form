@@ -2,7 +2,7 @@ import React from "react";
 import Button from 'react-bootstrap/Button';
 
 const Step4 = (props) => {
-    const { data, next, back, addAddress, removeAddress, handleaddress } = props;
+    const { data, next, back, addAddress, removeAddress, handleaddress, viewdisable } = props;
     return (
         <form>
 
@@ -21,27 +21,27 @@ const Step4 = (props) => {
                                         return (
                                             <div style={{ marginBottom: '20px' }} key={index}>
                                                 <div className="form-group" style={{ marginBottom: '15px' }}>
-                                                    <input type="text" value={item.area} className="form-control" placeholder='Area' name='area' onChange={(e) => handleaddress(e, index)} />
+                                                    <input type="text" value={item.area} className="form-control" placeholder='Area' name='area' onChange={(e) => handleaddress(e, index)} disabled={viewdisable ? true : false} />
                                                 </div>
                                                 {
                                                     item.areacheck ? <p style={{ color: 'red' }}>{item.areacheck}</p> : null
                                                 }
                                                 <div className="form-group" style={{ marginBottom: '15px' }}>
-                                                    <input type="text" value={item.streetname} className="form-control" placeholder='Street Name' name='streetname' onChange={(e) => handleaddress(e, index)} />
+                                                    <input type="text" value={item.streetname} className="form-control" placeholder='Street Name' name='streetname' onChange={(e) => handleaddress(e, index)} disabled={viewdisable ? true : false} />
                                                 </div>
                                                 {
                                                     item.streetnamecheck ? <p style={{ color: 'red' }}>{item.streetnamecheck}</p> : null
                                                 }
                                                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                                     <div className="form-group" style={{ marginBottom: '15px', width: '49%' }}>
-                                                        <input type="text" className="form-control" placeholder='Landmark' name='landmark' value={item.landmark} onChange={(e) => handleaddress(e, index)} />
+                                                        <input type="text" className="form-control" placeholder='Landmark' name='landmark' value={item.landmark} onChange={(e) => handleaddress(e, index)} disabled={viewdisable ? true : false} />
                                                     </div>
                                                     {
                                                         item.landmarkcheck ? <p style={{ color: 'red' }}>{item.landmarkcheck}</p> : null
                                                     }
 
                                                     <div className="form-group" style={{ marginBottom: '15px', width: '49%' }}>
-                                                        <input type="number" className="form-control" placeholder='Zipcode' name='zipcode' value={item.zipcode} onChange={(e) => handleaddress(e, index)} />
+                                                        <input type="number" className="form-control" placeholder='Zipcode' name='zipcode' value={item.zipcode} onChange={(e) => handleaddress(e, index)} disabled={viewdisable ? true : false} />
                                                     </div>
                                                     {
                                                         item.zipcodecheck ? <p style={{ color: 'red' }}>{item.zipcodecheck}</p> : null
@@ -53,7 +53,7 @@ const Step4 = (props) => {
 
                                                         <label style={{ marginLeft: '14px' }}>City:</label>
                                                         <div className="form-check form-check-inline">
-                                                            <select className="custom-select" value={item.city} name='city' onChange={(e) => handleaddress(e, index)}>
+                                                            <select className="custom-select" value={item.city[0]} name='city' onChange={(e) => handleaddress(e, index)} disabled={viewdisable ? true : false}>
                                                                 <option value="">City</option>
                                                                 <option value="rajkot">Rajkot</option>
                                                                 <option value="jamnagar">Jamnagar</option>
@@ -68,7 +68,7 @@ const Step4 = (props) => {
 
                                                         <label style={{ marginLeft: '14px' }}>State:</label>
                                                         <div className="form-check form-check-inline">
-                                                            <select className="custom-select" value={item.state} name='state' onChange={(e) => handleaddress(e, index)}>
+                                                            <select className="custom-select" value={item.state[0]} name='state' onChange={(e) => handleaddress(e, index)} disabled={viewdisable ? true : false}>
                                                                 <option value="2019">State</option>
                                                                 <option value="Delhi">Delhi</option>
                                                                 <option value="Punjab">Punjab</option>

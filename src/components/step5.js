@@ -2,7 +2,7 @@ import React from "react";
 import Button from 'react-bootstrap/Button';
 
 const Step5 = (props) => {
-    const { data, next, demo, back, addDocument, fileValidation } = props;
+    const { data, next, demo, back, addDocument, fileValidation, changeImage, viewdisable } = props;
     return (
         <form>
             <div className="container py-5" style={{ backgroundColor: 'cadetblue', width: '50%', marginTop: '0.5%', borderRadius: '30px' }}>
@@ -22,7 +22,7 @@ const Step5 = (props) => {
                                             <label>Select Document:</label>
 
                                             <div className="form-check form-check-inline">
-                                                <select className="custom-select" name='documentname' onChange={(e) => fileValidation(e, index)}>
+                                                <select className="custom-select" value={item.documentname[0]} name='documentname' onChange={(e) => fileValidation(e, index)} disabled={viewdisable ? true : false}>
                                                     <option>Select Document</option>
                                                     <option value="adharcard">Adhar Card</option>
                                                     <option value="passbook">Passbook</option>
@@ -36,7 +36,12 @@ const Step5 = (props) => {
                                             </div>
 
                                             <div>
-                                                <input type="file" name="documentfile" onChange={(e) => demo(e, index)}></input>
+                                                {
+                                                    item.documentfile ? <img src={item.documentfile[0]} style={{ height: '100px' }} /> : <input type="file" name="documentfile" onChange={(e) => demo(e, index)} disabled={viewdisable ? true : false}></input>
+                                                }
+
+                                                <Button onClick={() => changeImage(index)} disabled={viewdisable ? true : false}>Cancel</Button>
+
                                                 <div>
                                                     {
                                                         data[index].fileerror ? <p style={{ color: 'red' }}>{data[index].fileerror}</p> : null
