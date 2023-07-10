@@ -1,28 +1,75 @@
-import { logDOM } from "@testing-library/react";
-import { useEffect, useState } from "react"
+import { startTransition, useContext, useEffect, useState } from "react"
 import { Button, Pagination } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/context";
 
 const ListingTable = () => {
+
+
+    const { alldata, setAlldata } = UserContext();
+
+    const [currentPageNumber, setCurrentPageNumber] = useState(1)
+    const [totalPage, setTotalPage] = useState(1)
+    const [perPageItem, setPerPageItem] = useState(2)
+
+    const [sorting, setSorting] = useState({
+        column: "",
+        order: "",
+    });
 
     const navigate = useNavigate();
     const [data, setData] = useState([])
 
     useEffect(() => {
-        const localStorageData = localStorage.getItem('userAllData')
-        const parseData = JSON.parse(localStorageData)
-        setData(parseData)
-    }, []);
+
+        // const localStorageData = [...alldata]
+
+        const pageData = [...alldata]
+        const start = ((currentPageNumber - 1) * perPageItem)
+        const end = (perPageItem)
+        // setData(pageData.splice(start, end))
+        // setData(localStorageData.splice(0, perPageItem))
+
+        // ------------------------Shorting------------------------
+
+
+        let { column, order } = sorting;
+        let searched = [...pageData];
+
+        if (column) {
+            switch (order) {
+                case "ASC":
+                    searched = searched.sort((a, b) => {
+                        return a[0].basicDetails[column].toLowerCase() > b[0].basicDetails[column].toLowerCase() ? 1 : -1
+                    }
+                    );
+
+                    break;
+                case "DESC":
+                    searched = searched.sort((a, b) => {
+                        return a[0].basicDetails[column].toLowerCase() < b[0].basicDetails[column].toLowerCase() ? 1 : -1
+                    }
+                    );
+                    break;
+                default:
+
+            }
+        }
+        // setAlldata(searched)
+        setData(searched.splice(start, end));
+    }, [sorting, currentPageNumber]);
 
     function removeElement(i) {
-        const getAllDataFromLocal = JSON.parse(localStorage.getItem('userAllData'))
+        const getAllDataFromLocal = [...alldata]
         const remove = getAllDataFromLocal.splice(i, 1)
-        localStorage.setItem('userAllData', JSON.stringify(getAllDataFromLocal))
+
+        // localStorage.setItem('userAllData', JSON.stringify(getAllDataFromLocal))
+        setAlldata(getAllDataFromLocal)
         setData(getAllDataFromLocal)
     }
 
     function editElement(i) {
-
+        console.log(i);
         navigate(`/form/edit/${i}`)
     }
 
@@ -30,26 +77,35 @@ const ListingTable = () => {
         navigate(`/form/view/${i}`)
     }
 
+    function paginationData(number) {
+        setCurrentPageNumber(number)
+        const pageData = [...alldata]
+        const start = ((number - 1) * perPageItem)
+        const end = (perPageItem)
+        // setData(pageData)
+    }
+
+
     function pagination() {
-        let active = 2;
+        let active = currentPageNumber;
+        let totalpage = Math.ceil(alldata.length / perPageItem)
         let items = [];
-        for (let number = 1; number <= 5; number++) {
+        for (let number = 1; number <= totalpage; number++) {
+
             items.push(
-                <Pagination.Item key={number} active={number === active}>
+                <Pagination.Item key={number} active={active === number} onClick={() => paginationData(number)}>
                     {number}
                 </Pagination.Item>,
             );
         }
         return items
-        console.log(items);
     }
 
 
     function searchValueFunction(event) {
 
 
-
-        const localStorageData = JSON.parse(localStorage.getItem('userAllData'))
+        const localStorageData = [...alldata]
         if (event.target.value == "") {
             setData(localStorageData)
         }
@@ -60,11 +116,41 @@ const ListingTable = () => {
                 return (event.target.value.toLowerCase().includes(item[0].basicDetails.firstname.toLowerCase()) || event.target.value.toLowerCase().includes(item[0].basicDetails.lastname.toLowerCase()))
             }
             setData(filterArray)
-            console.log(filterArray);
         }
 
 
     }
+
+    function goToForm() {
+        navigate('/form')
+    }
+
+    const sort = (column) => {
+        const tempsorting = { ...sorting };
+
+        if (column === tempsorting.column) {
+            switch (tempsorting.order) {
+                case "":
+                    tempsorting.column = column;
+                    tempsorting.order = "ASC";
+                    break;
+                case "ASC":
+                    tempsorting.column = column;
+                    tempsorting.order = "DESC";
+                    break;
+                default:
+                    tempsorting.order = "";
+                    tempsorting.column = column;
+            }
+        } else {
+
+            tempsorting.column = column;
+            tempsorting.order = "ASC";
+        }
+        setCurrentPageNumber(1)
+        setSorting(tempsorting);
+
+    };
 
     return (
         <>
@@ -78,14 +164,24 @@ const ListingTable = () => {
                         <div style={{ marginBottom: '28px' }}>
                             <input id="search" type="search" placeholder="Search..." autoFocus style={{ padding: '6px', borderRadius: '12px' }} onChange={(e) => searchValueFunction(e)} />
                         </div>
+                        <div style={{ marginBottom: '20px' }}>
+                            <Button onClick={() => goToForm()}>Fill Form</Button>
+                        </div>
 
                         <table className="table custom-table">
                             <thead>
                                 <tr>
-                                    <th scope="col" style={{ color: 'black' }}>First Name</th>
-                                    <th scope="col" style={{ color: 'black' }}>Last Name</th>
-                                    <th scope="col" style={{ color: 'black' }}>Email</th>
-                                    <th scope="col" style={{ color: 'black' }}>Gender</th>
+                                    <th scope="col" style={{ color: 'black' }} onClick={() => sort("firstname")}>First Name
+                                        {/* {
+                                            console.log(sorting.order)
+                                        } */}
+                                        {/* <span style={{ color: "black", fontSize: "30px" }}>
+                                            &#8593;
+                                        </span> */}
+                                    </th>
+                                    <th scope="col" style={{ color: 'black' }} onClick={() => sort("lastname")}>Last Name</th>
+                                    <th scope="col" style={{ color: 'black' }} onClick={() => sort("email")}>Email</th>
+                                    <th scope="col" style={{ color: 'black' }} onClick={() => sort("gender")}>Gender</th>
                                     <th scope="col" style={{ color: 'black' }}>Document</th>
                                     <th scope="col" style={{ color: 'black' }}>Delete</th>
                                     <th scope="col" style={{ color: 'black' }}>Edit</th>
@@ -120,11 +216,11 @@ const ListingTable = () => {
                                                 </td>
 
                                                 <td>
-                                                    <Button onClick={() => editElement(index)}>Edit</Button>
+                                                    <Button onClick={() => editElement(item[4].id)}>Edit</Button>
                                                 </td>
 
                                                 <td>
-                                                    <Button onClick={() => viewElement(index)}>View</Button>
+                                                    <Button onClick={() => viewElement(item[4].id)}>View</Button>
                                                 </td>
                                             </tr>
 

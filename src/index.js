@@ -6,11 +6,17 @@ import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/css/style.css'
 import '../src/fonts/icomoon/style.css'
+import { Form } from './context/context';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
+
   <App />
+
+
+
   // </React.StrictMode>  
 );
 

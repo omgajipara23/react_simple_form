@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Step1 from './step1';
 import Step2 from './step2';
 import Step3 from './step3';
@@ -7,15 +7,16 @@ import Step5 from './step5';
 import Step6 from './step6';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
+import { UserContext } from '../context/context';
 
 function BasicForm(props) {
-    let { id } = useParams();
+    const { id } = useParams();
     let { isView } = props
-
+    console.log(id, "params");
 
     const [error, setError] = useState({})
 
-    const [alldata, setAlldata] = useState([])
+
 
 
     const [currentStep, setCurrentStep] = useState(1);
@@ -31,6 +32,8 @@ function BasicForm(props) {
         branch: "",
         accountnumber: "",
     })
+
+    const { alldata, setAlldata } = UserContext();
 
     const [document, setDocument] = useState([{
         documentname: "",
@@ -62,15 +65,18 @@ function BasicForm(props) {
 
 
     useEffect(() => {
-
+        console.log(id);
+        console.log("use effectttttttt");
         if (id != undefined) {
-            const getAllDataFromLocal = JSON.parse(localStorage.getItem('userAllData'))
-            const edit = getAllDataFromLocal.splice(id, 1)
-            setValues(edit[0][0].basicDetails)
-            setEducation(edit[0][1].allEducation)
-            setAddress(edit[0][2].finalAddress)
-            setDocument(edit[0][3].allDocument)
-
+            const getAllDataFromLocal = [...alldata]
+            if (getAllDataFromLocal.length > 0) {
+                const edit = getAllDataFromLocal
+                const data = edit.filter(ele => ele[4].id === +id)
+                setValues(data[0][0].basicDetails)
+                setEducation(data[0][1].allEducation)
+                setAddress(data[0][2].finalAddress)
+                setDocument(data[0][3].allDocument)
+            }
         }
     }, [])
 
@@ -253,7 +259,6 @@ function BasicForm(props) {
 
 
             if (item.fileerror || item.documentnameerror) {
-                console.log("in iffffffff");
                 flag = false
 
             }
@@ -269,30 +274,32 @@ function BasicForm(props) {
 
         let allFormData = [{ basicDetails: values }, { allEducation: education }, { finalAddress: address }, { allDocument: document }]
 
-        var localData = JSON.parse(localStorage.getItem("userAllData") || "[]")
+
+        // var localData = JSON.parse(localStorage.getItem("userAllData") || "[]")
+        let localData = alldata
 
         if (localData.length == 0) {
-            // allFormData.push({ id: 1 })
+            console.log(localData, "localllllllll");
+            allFormData.push({ id: 1 })
             localData.push(allFormData)
-            localStorage.setItem('userAllData', JSON.stringify(localData))
+            setAlldata(localData)
+            // localStorage.setItem('userAllData', JSON.stringify(localData))
 
         } else {
-            // const id = localData[localData.length - 1][4].id
-            // const updateId = id + 1
-            // allFormData.push({ id: updateId })
-            console.log(id, "===================================================");
-
-            console.log(allFormData, "formdataaaaaaaaaaaaa");
-            console.log(JSON.parse(localStorage.getItem('userAllData')).splice(id, 1));
-            console.log(JSON.parse(localStorage.getItem('userAllData')), "in locallllllllllll");
+            const id = localData.length
+            const updateId = id + 1
+            allFormData.push({ id: updateId })
 
             if (id) {
-
+                console.log(localData, "in ifffff locallllllllllll");
                 localData.splice(id, 1, allFormData)
-                localStorage.setItem('userAllData', JSON.stringify(localData))
+                setAlldata(localData)
+                // localStorage.setItem('userAllData', JSON.stringify(localData))
             } else {
+                console.log(localData, "in else 22222 locallllllllllll");
                 localData.push(allFormData)
-                localStorage.setItem('userAllData', JSON.stringify(localData))
+                setAlldata(localData)
+                // localStorage.setItem('userAllData', JSON.stringify(localData))
             }
 
         }
