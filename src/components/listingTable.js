@@ -55,21 +55,28 @@ const ListingTable = () => {
 
             }
         }
-        // setAlldata(searched)
         setData(searched.splice(start, end));
     }, [sorting, currentPageNumber]);
 
     function removeElement(i) {
-        const getAllDataFromLocal = [...alldata]
-        const remove = getAllDataFromLocal.splice(i, 1)
 
-        // localStorage.setItem('userAllData', JSON.stringify(getAllDataFromLocal))
+
+        const getAllDataFromLocal = [...alldata]
+
+        let indexToBeDeleted
+        getAllDataFromLocal.map((ele, index) => {
+            if (ele[4].id == +i) {
+                indexToBeDeleted = index
+            }
+        })
+
+        getAllDataFromLocal.splice(indexToBeDeleted, 1)
+
         setAlldata(getAllDataFromLocal)
         setData(getAllDataFromLocal)
     }
 
     function editElement(i) {
-        console.log(i);
         navigate(`/form/edit/${i}`)
     }
 
@@ -173,7 +180,7 @@ const ListingTable = () => {
                                 <tr>
                                     <th scope="col" style={{ color: 'black' }} onClick={() => sort("firstname")}>First Name
                                         {/* {
-                                            console.log(sorting.order)
+                                            
                                         } */}
                                         {/* <span style={{ color: "black", fontSize: "30px" }}>
                                             &#8593;
@@ -212,7 +219,7 @@ const ListingTable = () => {
                                                 </td>
 
                                                 <td>
-                                                    <Button onClick={() => removeElement(index)}>Delete</Button>
+                                                    <Button onClick={() => removeElement(item[4].id)}>Delete</Button>
                                                 </td>
 
                                                 <td>

@@ -12,7 +12,7 @@ import { UserContext } from '../context/context';
 function BasicForm(props) {
     const { id } = useParams();
     let { isView } = props
-    console.log(id, "params");
+
 
     const [error, setError] = useState({})
 
@@ -65,8 +65,8 @@ function BasicForm(props) {
 
 
     useEffect(() => {
-        console.log(id);
-        console.log("use effectttttttt");
+
+
         if (id != undefined) {
             const getAllDataFromLocal = [...alldata]
             if (getAllDataFromLocal.length > 0) {
@@ -113,7 +113,7 @@ function BasicForm(props) {
         newDoc[index][event.target.name] = [event.target.value]
 
         setDocument(newDoc)
-        // console.log(document);
+        // 
     }
 
     const getBase64 = (file) => {
@@ -153,7 +153,7 @@ function BasicForm(props) {
 
     function removefield(index) {
         const rows = [...education];
-        console.log(index, "index")
+
         rows.splice(index, 1);
         setEducation(rows);
     }
@@ -263,7 +263,7 @@ function BasicForm(props) {
 
             }
             else {
-                console.log("on elseeeeeeeeee");
+
             }
         })
 
@@ -279,7 +279,7 @@ function BasicForm(props) {
         let localData = alldata
 
         if (localData.length == 0) {
-            console.log(localData, "localllllllll");
+
             allFormData.push({ id: 1 })
             localData.push(allFormData)
             setAlldata(localData)
@@ -291,12 +291,12 @@ function BasicForm(props) {
             allFormData.push({ id: updateId })
 
             if (id) {
-                console.log(localData, "in ifffff locallllllllllll");
+
                 localData.splice(id, 1, allFormData)
                 setAlldata(localData)
                 // localStorage.setItem('userAllData', JSON.stringify(localData))
             } else {
-                console.log(localData, "in else 22222 locallllllllllll");
+
                 localData.push(allFormData)
                 setAlldata(localData)
                 // localStorage.setItem('userAllData', JSON.stringify(localData))
