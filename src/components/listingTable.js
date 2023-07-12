@@ -72,7 +72,7 @@ const ListingTable = () => {
 
     function editElement(i) {
         navigate(`/form/edit/${i}`)
-        dispatch(editListingData(i))
+        // dispatch(editListingData(i))
     }
 
     function viewElement(i) {

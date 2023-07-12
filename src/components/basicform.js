@@ -8,7 +8,7 @@ import Step6 from './step6';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addListingData } from '../store/slices/listing.slices';
+import { addListingData, editListingData } from '../store/slices/listing.slices';
 
 function BasicForm(props) {
     const { id } = useParams();
@@ -38,10 +38,9 @@ function BasicForm(props) {
     // const { alldata, setAlldata } = UserContext();
 
     const [document, setDocument] = useState([{
-        documentname: "",
-        documentfile: ""
     }
     ])
+    // console.log(document, "documenttttt");
 
     const [education, setEducation] = useState([
         {
@@ -112,8 +111,17 @@ function BasicForm(props) {
 
     function fileValidation(event, index) {
         let newDoc = [...document]
-        newDoc[index][event.target.name] = event.target.value
-        setDocument(newDoc)
+
+        const demo = Object.defineProperties(newDoc[index],
+            {
+                "documentname": {
+                    value: event.target.value,
+                    writable: true
+                },
+            })
+        console.log(demo, "------------------");
+
+        setDocument([...newDoc])
     }
 
     const getBase64 = (file) => {
@@ -131,8 +139,8 @@ function BasicForm(props) {
         const file = event.target.files[0]
 
         const baseImage = await getBase64(file)
-
-        test[index][event.target.name] = [baseImage]
+        console.log(event.target.name);
+        test[index][event.target.name] = baseImage
         setDocument(test)
     }
 
@@ -215,14 +223,15 @@ function BasicForm(props) {
                 let documentNameMissing = [...document]
                 documentNameMissing[index].documentnameerror = "Please select document name"
                 setDocument(documentNameMissing)
-            } else {
-                let documentNameMissing1 = [...document]
-                documentNameMissing1[index].documentnameerror = ""
-                setDocument(documentNameMissing1)
             }
+            // else {
+            //     let documentNameMissing1 = [...document]
+            //     documentNameMissing1[index].documentnameerror = ""
+            //     setDocument(documentNameMissing1)
+            // }
 
             if (item.documentfile.length > 0) {
-                var str = item.documentfile[0];
+                var str = item.documentfile;
                 var patternArr = ['data:image/jpeg', 'data:image/png'];
 
                 function contains(target, pattern) {
@@ -240,11 +249,11 @@ function BasicForm(props) {
                     newDoc1[index].fileerror = "Invalid document"
                     setDocument(newDoc1)
                 }
-                else {
-                    let newDoc1 = [...document]
-                    newDoc1[index].fileerror = ""
-                    setDocument(newDoc1)
-                }
+                // else {
+                //     let newDoc1 = [...document]
+                //     newDoc1[index].fileerror = ""
+                //     setDocument(newDoc1)
+                // }
 
             }
             else {
@@ -258,10 +267,8 @@ function BasicForm(props) {
 
         document.map((item) => {
 
-
             if (item.fileerror || item.documentnameerror) {
                 flag = false
-
             }
             else {
 
@@ -285,22 +292,21 @@ function BasicForm(props) {
             dispatch(addListingData(allFormData))
 
         } else {
-            const id = listingData.length
-            const updateId = id + 1
-            allFormData.push({ id: updateId })
-            dispatch(addListingData(allFormData))
 
-            // if (id) {
 
-            //     localData.splice(id, 1, allFormData)
-            //     setAlldata(localData)
-            //     // localStorage.setItem('userAllData', JSON.stringify(localData))
-            // } else {
-
-            //     localData.push(allFormData)
-            //     setAlldata(localData)
-            //     // localStorage.setItem('userAllData', JSON.stringify(localData))
-            // }
+            if (id) {
+                allFormData.push({ id: +id })
+                console.log(allFormData, "+++++++++++++++++++++++++++++");
+                dispatch(editListingData(allFormData))
+                // setAlldata(localData)
+            } else {
+                const id = listingData.length
+                const updateId = id + 1
+                allFormData.push({ id: +updateId })
+                dispatch(addListingData(allFormData))
+                // localData.push(allFormData)
+                // setAlldata(localData)
+            }
 
         }
 

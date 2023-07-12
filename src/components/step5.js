@@ -40,7 +40,7 @@ const Step5 = (props) => {
 
                                                 <div>
                                                     {
-                                                        item.documentfile ? <img src={item.documentfile[0]} style={{ height: '100px' }} /> : <input type="file" name="documentfile" onChange={(e) => demo(e, index)} disabled={viewdisable ? true : false}></input>
+                                                        item.documentfile ? <img src={item.documentfile} style={{ height: '100px' }} /> : <input type="file" name="documentfile" onChange={(e) => demo(e, index)} disabled={viewdisable ? true : false}></input>
                                                     }
 
                                                     <Button onClick={() => changeImage(index)} disabled={viewdisable ? true : false}>Cancel</Button>
