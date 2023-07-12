@@ -1,9 +1,8 @@
 import { startTransition, useContext, useEffect, useState } from "react"
 import { Button, Pagination } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../context/context";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteListingData, editListingData, searchListingData } from "../store/slices/listing.slices";
+import { deleteListingData, editListingData } from "../store/slices/listing.slices";
 
 const ListingTable = () => {
 
@@ -11,7 +10,6 @@ const ListingTable = () => {
 
     let listingData = useSelector((state) => state.listing)
 
-    const { alldata, setAlldata } = UserContext();
 
     const [currentPageNumber, setCurrentPageNumber] = useState(1)
     const [totalPage, setTotalPage] = useState(1)
@@ -22,52 +20,49 @@ const ListingTable = () => {
         order: "",
     });
 
+
     const navigate = useNavigate();
     const [data, setData] = useState([])
-    console.log(data, "data")
 
     useEffect(() => {
         const cloneListingData = [...listingData]
         setData(cloneListingData)
     }, [])
 
-    // useEffect(() => {
 
-    //     // const localStorageData = [...alldata]
+    useEffect(() => {
+        const pageData = [...listingData]
+        const start = ((currentPageNumber - 1) * perPageItem)
+        const end = (perPageItem)
 
-    //     const pageData = [...alldata]
-    //     const start = ((currentPageNumber - 1) * perPageItem)
-    //     const end = (perPageItem)
-    //     // setData(pageData.splice(start, end))
-    //     // setData(localStorageData.splice(0, perPageItem))
-
-    //     // ------------------------Shorting------------------------
+        setData(pageData.splice(start, end))
 
 
-    //     let { column, order } = sorting;
-    //     let searched = [...pageData];
 
-    //     if (column) {
-    //         switch (order) {
-    //             case "ASC":
-    //                 searched = searched.sort((a, b) => {
-    //                     return a[0].basicDetails[column].toLowerCase() > b[0].basicDetails[column].toLowerCase() ? 1 : -1
-    //                 }
-    //                 );
+        let { column, order } = sorting;
+        let searched = [...listingData];
 
-    //                 break;
-    //             case "DESC":
-    //                 searched = searched.sort((a, b) => {
-    //                     return a[0].basicDetails[column].toLowerCase() < b[0].basicDetails[column].toLowerCase() ? 1 : -1
-    //                 }
-    //                 );
-    //                 break;
-    //             default:
+        if (column) {
+            switch (order) {
+                case "ASC":
+                    searched = searched.sort((a, b) => {
+                        return a[0].basicDetails[column].toLowerCase() > b[0].basicDetails[column].toLowerCase() ? 1 : -1
+                    }
+                    );
 
-    //         }
-    //     }
-    //     setData(searched.splice(start, end));
-    // }, [sorting, currentPageNumber]);
+                    break;
+                case "DESC":
+                    searched = searched.sort((a, b) => {
+                        return a[0].basicDetails[column].toLowerCase() < b[0].basicDetails[column].toLowerCase() ? 1 : -1
+                    }
+                    );
+                    break;
+                default:
+
+            }
+        }
+        setData(searched.splice(start, end));
+    }, [sorting, currentPageNumber]);
 
 
 
@@ -86,16 +81,15 @@ const ListingTable = () => {
 
     function paginationData(number) {
         setCurrentPageNumber(number)
-        const pageData = [...alldata]
+        const pageData = [...data]
         const start = ((number - 1) * perPageItem)
         const end = (perPageItem)
-        // setData(pageData)
     }
 
 
     function pagination() {
         let active = currentPageNumber;
-        let totalpage = Math.ceil(alldata.length / perPageItem)
+        let totalpage = Math.ceil(listingData.length / perPageItem)
         let items = [];
         for (let number = 1; number <= totalpage; number++) {
 
@@ -159,10 +153,7 @@ const ListingTable = () => {
 
     };
 
-    // -------------------------------------------REDUX TOOLKIT-------------------------------------------
 
-
-    // console.log(listingData, "dataaaaaaaaaaa");
 
     return (
         <>
@@ -234,15 +225,9 @@ const ListingTable = () => {
                                                     <Button onClick={() => viewElement(item[4].id)}>View</Button>
                                                 </td>
                                             </tr>
-
-
-
                                         )
-
                                     })
                                 }
-
-
                             </tbody>
                         </table>
                         <div>

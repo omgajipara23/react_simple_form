@@ -6,7 +6,6 @@ import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../src/css/style.css'
 import '../src/fonts/icomoon/style.css'
-import { Form } from './context/context';
 import { Provider } from 'react-redux';
 import { store } from './store';
 

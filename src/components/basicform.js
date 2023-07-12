@@ -7,7 +7,6 @@ import Step5 from './step5';
 import Step6 from './step6';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { UserContext } from '../context/context';
 import { useDispatch, useSelector } from 'react-redux';
 import { addListingData } from '../store/slices/listing.slices';
 
@@ -75,7 +74,6 @@ function BasicForm(props) {
             if (getAllDataFromLocal.length > 0) {
                 const edit = getAllDataFromLocal
                 const data = edit.filter(ele => ele[4].id === +id)
-                console.log(data, "dataaaaaaaaaaaaa");
                 setValues(data[0][0].basicDetails)
                 setEducation(data[0][1].allEducation)
                 setAddress(data[0][2].finalAddress)
@@ -214,19 +212,16 @@ function BasicForm(props) {
         document.map((item, index) => {
 
             if (item.documentname === "") {
-                console.log("asdasdasdasd");
                 let documentNameMissing = [...document]
                 documentNameMissing[index].documentnameerror = "Please select document name"
                 setDocument(documentNameMissing)
             } else {
-                console.log("esls asdasdasdasd");
                 let documentNameMissing1 = [...document]
                 documentNameMissing1[index].documentnameerror = ""
                 setDocument(documentNameMissing1)
             }
 
             if (item.documentfile.length > 0) {
-                console.log("if length");
                 var str = item.documentfile[0];
                 var patternArr = ['data:image/jpeg', 'data:image/png'];
 
@@ -253,7 +248,6 @@ function BasicForm(props) {
 
             }
             else {
-                console.log("else length");
 
                 let newDoc1 = [...document]
                 newDoc1[index].fileerror = "Please upload document"
