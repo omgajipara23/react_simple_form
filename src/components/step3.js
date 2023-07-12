@@ -104,7 +104,7 @@ const Step3 = (props) => {
                                         })
                                     }
                                     <div>
-                                        <Button variant="dark" style={{ marginBottom: '10px' }} onClick={addeducation} >
+                                        <Button variant="dark" style={{ marginBottom: '10px' }} onClick={addeducation} disabled={viewdisable ? true : false}>
                                             Add More
                                         </Button>
                                         <br></br>

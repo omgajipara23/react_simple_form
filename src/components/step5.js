@@ -60,12 +60,12 @@ const Step5 = (props) => {
                                 })
                             }
 
-                            <Button variant="dark" style={{ marginBottom: '10px' }} onClick={addDocument} >
+                            <Button variant="dark" style={{ marginBottom: '10px' }} onClick={addDocument} disabled={viewdisable ? true : false}>
                                 Add More
                             </Button>
                             <br></br>
                             <Button onClick={back} variant="dark" style={{ marginRight: '10px' }}>Back</Button>
-                            <Button onClick={next} variant="success" type="submit" >Submit</Button>
+                            <Button onClick={next} variant="success" type="submit" disabled={viewdisable ? true : false}>Submit</Button>
 
                         </fieldset>
 

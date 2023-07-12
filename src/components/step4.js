@@ -92,7 +92,7 @@ const Step4 = (props) => {
                                         })
                                     }
                                     <div>
-                                        <Button variant="dark" style={{ marginBottom: '10px' }} onClick={addAddress}>
+                                        <Button variant="dark" style={{ marginBottom: '10px' }} onClick={addAddress} disabled={viewdisable ? true : false}>
                                             Add More
                                         </Button>
                                         <br></br>
