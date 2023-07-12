@@ -114,8 +114,7 @@ function BasicForm(props) {
 
     function fileValidation(event, index) {
         let newDoc = [...document]
-        console.log(newDoc);
-        newDoc[index][event.target.name] = [event.target.value]
+        newDoc[index][event.target.name] = event.target.value
         setDocument(newDoc)
     }
 

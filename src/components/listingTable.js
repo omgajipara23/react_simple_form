@@ -3,11 +3,13 @@ import { Button, Pagination } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/context";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteListingData, editListingData } from "../store/slices/listing.slices";
+import { deleteListingData, editListingData, searchListingData } from "../store/slices/listing.slices";
 
 const ListingTable = () => {
 
     const dispatch = useDispatch();
+
+    let listingData = useSelector((state) => state.listing)
 
     const { alldata, setAlldata } = UserContext();
 
@@ -22,44 +24,50 @@ const ListingTable = () => {
 
     const navigate = useNavigate();
     const [data, setData] = useState([])
+    console.log(data, "data")
 
     useEffect(() => {
+        const cloneListingData = [...listingData]
+        setData(cloneListingData)
+    }, [])
 
-        // const localStorageData = [...alldata]
+    // useEffect(() => {
 
-        const pageData = [...alldata]
-        const start = ((currentPageNumber - 1) * perPageItem)
-        const end = (perPageItem)
-        // setData(pageData.splice(start, end))
-        // setData(localStorageData.splice(0, perPageItem))
+    //     // const localStorageData = [...alldata]
 
-        // ------------------------Shorting------------------------
+    //     const pageData = [...alldata]
+    //     const start = ((currentPageNumber - 1) * perPageItem)
+    //     const end = (perPageItem)
+    //     // setData(pageData.splice(start, end))
+    //     // setData(localStorageData.splice(0, perPageItem))
+
+    //     // ------------------------Shorting------------------------
 
 
-        let { column, order } = sorting;
-        let searched = [...pageData];
+    //     let { column, order } = sorting;
+    //     let searched = [...pageData];
 
-        if (column) {
-            switch (order) {
-                case "ASC":
-                    searched = searched.sort((a, b) => {
-                        return a[0].basicDetails[column].toLowerCase() > b[0].basicDetails[column].toLowerCase() ? 1 : -1
-                    }
-                    );
+    //     if (column) {
+    //         switch (order) {
+    //             case "ASC":
+    //                 searched = searched.sort((a, b) => {
+    //                     return a[0].basicDetails[column].toLowerCase() > b[0].basicDetails[column].toLowerCase() ? 1 : -1
+    //                 }
+    //                 );
 
-                    break;
-                case "DESC":
-                    searched = searched.sort((a, b) => {
-                        return a[0].basicDetails[column].toLowerCase() < b[0].basicDetails[column].toLowerCase() ? 1 : -1
-                    }
-                    );
-                    break;
-                default:
+    //                 break;
+    //             case "DESC":
+    //                 searched = searched.sort((a, b) => {
+    //                     return a[0].basicDetails[column].toLowerCase() < b[0].basicDetails[column].toLowerCase() ? 1 : -1
+    //                 }
+    //                 );
+    //                 break;
+    //             default:
 
-            }
-        }
-        setData(searched.splice(start, end));
-    }, [sorting, currentPageNumber]);
+    //         }
+    //     }
+    //     setData(searched.splice(start, end));
+    // }, [sorting, currentPageNumber]);
 
 
 
@@ -104,15 +112,15 @@ const ListingTable = () => {
     function searchValueFunction(event) {
 
 
-        const localStorageData = [...alldata]
         if (event.target.value == "") {
-            setData(localStorageData)
+            const inIfCloneData = [...listingData]
+            setData(inIfCloneData)
         }
         else {
-            const filterArray = localStorageData.filter(check)
 
+            const filterArray = listingData.filter(check)
             function check(item) {
-                return (event.target.value.toLowerCase().includes(item[0].basicDetails.firstname.toLowerCase()) || event.target.value.toLowerCase().includes(item[0].basicDetails.lastname.toLowerCase()))
+                return (event.target.value.toLowerCase().includes(item[0].basicDetails.firstname.toLowerCase()) || event.target.value.toLowerCase().includes(item[0].basicDetails.lastname.toLowerCase()) || event.target.value.toLowerCase().includes(item[0].basicDetails.email.toLowerCase()) || event.target.value.toLowerCase().includes(item[0].basicDetails.gender.toLowerCase()))
             }
             setData(filterArray)
         }
@@ -153,7 +161,8 @@ const ListingTable = () => {
 
     // -------------------------------------------REDUX TOOLKIT-------------------------------------------
 
-    const listingData = useSelector((state) => state.listing)
+
+    // console.log(listingData, "dataaaaaaaaaaa");
 
     return (
         <>
@@ -195,7 +204,7 @@ const ListingTable = () => {
 
                                 <tr className="spacer"><td colSpan="100"></td></tr>
                                 {
-                                    listingData.map((item, index) => {
+                                    data.map((item, index) => {
 
                                         return (
 

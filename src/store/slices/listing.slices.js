@@ -135,10 +135,28 @@ const listingSlice = createSlice({
         },
 
         editListingData(state, action) {
-            console.log(action.payload);
+            // console.log(action.payload);
+        },
+
+        searchListingData(state, action) {
+            console.log(action.payload, "<<<===");
+
+            if (action.payload === "") {
+
+            } else {
+                const filterArray = state.filter(check)
+
+                function check(item) {
+                    console.log(item);
+                    return (action.payload.toLowerCase().includes(item[0].basicDetails.firstname.toLowerCase()) || action.payload.toLowerCase().includes(item[0].basicDetails.lastname.toLowerCase()))
+                }
+
+                console.log(filterArray, "filter array");
+                // state.push(filterArray)
+            }
         }
     }
 })
 
 export default listingSlice.reducer
-export const { addListingData, deleteListingData, editListingData } = listingSlice.actions
+export const { addListingData, deleteListingData, editListingData, searchListingData } = listingSlice.actions

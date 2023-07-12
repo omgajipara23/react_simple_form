@@ -25,7 +25,7 @@ const Step5 = (props) => {
                                                 <label>Select Document:</label>
 
                                                 <div className="form-check form-check-inline">
-                                                    <select className="custom-select" value={item.documentname[0]} name='documentname' onChange={(e) => fileValidation(e, index)} disabled={viewdisable ? true : false}>
+                                                    <select className="custom-select" value={item.documentname} name='documentname' onChange={(e) => fileValidation(e, index)} disabled={viewdisable ? true : false}>
                                                         <option>Select Document</option>
                                                         <option value="adharcard">Adhar Card</option>
                                                         <option value="passbook">Passbook</option>
