@@ -99,9 +99,14 @@ function BasicForm(props) {
 
     function handleaddremove(event, index) {
         let newform = [...education]
-        const demo = event.target.name.split('-')
-        newform[index][demo[0]] = [event.target.value]
 
+        let demo = event.target.name.split('-')
+        let elementName = demo[0]
+        newform[index] = {
+            ...newform[index],
+            [elementName]: [event.target.value]
+
+        }
         setEducation(newform)
     }
 
@@ -416,147 +421,146 @@ function BasicForm(props) {
     function Step3Validation() {
         const error = {}
 
-        // const data = [...education]
-        // for (let i = 0; i < data.length; i++) {
+        const data = [...education]
+        for (let i = 0; i < data.length; i++) {
 
-        //     const boardnameString = data[i].boardname.toString()
-
-
-        //     if (data[i].boardname === "") {
-        //         error.boardname = "Enter board name"
-        //         data[i].boradnamecheck = "Enter board name"
-        //     } else if (boardnameString.match(/\d+/g)) {
-        //         error.boardname = "please Enter only char"
-        //         data[i].boradnamecheck = "please Enter only char"
-        //     } else {
-        //         data[i].boradnamecheck = ""
-        //     }
-
-        //     const coursenameString = data[i].coursename.toString()
-
-        //     if (data[i].coursename === "") {
-        //         error.coursename = "Enter course name"
-        //         data[i].coursenamecheck = "Enter course name"
-        //     } else if (coursenameString.match(/\d+/g)) {
-        //         error.coursename = "please Enter only char"
-        //         data[i].coursenamecheck = "please Enter only char"
-        //     }
-        //     else {
-        //         data[i].coursenamecheck = ""
-        //     }
-
-        //     const scroeString = Number(data[i].score[0])
+            const boardnameString = data[i].boardname.toString()
 
 
-        //     if (data[i].score === "") {
-        //         data[i].scorecheck = "Enter score"
-        //         error.score = "Enter score"
-        //     } else if (scroeString > 100 || scroeString < 10) {
-        //         data[i].scorecheck = "Enter valid score"
-        //         error.score = "Enter valid score"
-        //     } else {
-        //         data[i].scorecheck = ""
-        //     }
+            if (data[i].boardname === "") {
+                error.boardname = "Enter board name"
+                data[i].boradnamecheck = "Enter board name"
+            } else if (boardnameString.match(/\d+/g)) {
+                error.boardname = "please Enter only char"
+                data[i].boradnamecheck = "please Enter only char"
+            } else {
+                data[i].boradnamecheck = ""
+            }
 
-        //     if (data[i].passingyear === "") {
-        //         data[i].passingyearcheck = "Enter passing year"
-        //         error.passingyear = "Enter passing year"
-        //     } else {
-        //         data[i].passingyearcheck = ""
-        //     }
+            const coursenameString = data[i].coursename.toString()
 
-        //     if (data[i].language === "") {
-        //         data[i].languagecheck = "Fill language"
-        //         error.language = "Fill language"
-        //     } else {
-        //         data[i].languagecheck = ""
-        //     }
+            if (data[i].coursename === "") {
+                error.coursename = "Enter course name"
+                data[i].coursenamecheck = "Enter course name"
+            } else if (coursenameString.match(/\d+/g)) {
+                error.coursename = "please Enter only char"
+                data[i].coursenamecheck = "please Enter only char"
+            }
+            else {
+                data[i].coursenamecheck = ""
+            }
 
-        //     if (data[i].result === "") {
-        //         data[i].resultcheck = "Please upload result"
-        //         error.result = "Please upload result"
-        //     } else {
-        //         data[i].resultcheck = ""
-        //     }
+            const scroeString = Number(data[i].score[0])
 
-        // }
 
-        // setEducation(data)
+            if (data[i].score === "") {
+                data[i].scorecheck = "Enter score"
+                error.score = "Enter score"
+            } else if (scroeString > 100 || scroeString < 10) {
+                data[i].scorecheck = "Enter valid score"
+                error.score = "Enter valid score"
+            } else {
+                data[i].scorecheck = ""
+            }
+
+            if (data[i].passingyear === "") {
+                data[i].passingyearcheck = "Enter passing year"
+                error.passingyear = "Enter passing year"
+            } else {
+                data[i].passingyearcheck = ""
+            }
+
+            if (data[i].language === "") {
+                data[i].languagecheck = "Fill language"
+                error.language = "Fill language"
+            } else {
+                data[i].languagecheck = ""
+            }
+
+            if (data[i].result === "") {
+                data[i].resultcheck = "Please upload result"
+                error.result = "Please upload result"
+            } else {
+                data[i].resultcheck = ""
+            }
+
+        }
+        setEducation(data)
         return error
     }
 
     function Step4Validation() {
         const error = {}
 
-        // const alphaNumberic = /^[A-Za-z0-9]+$/;
+        const alphaNumberic = /^[A-Za-z0-9]+$/;
 
-        // const data = [...address]
+        const data = [...address]
 
-        // for (let i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
 
-        //     if (data[i].area == "") {
-        //         data[i].areacheck = "Please enter area"
-        //         error.area = "Please enter area"
-        //     } else if (!(data[i].area[0].match(alphaNumberic))) {
-        //         error.area = "Enter valid address"
-        //         data[i].areacheck = "Enter valid address"
-        //     }
-        //     else {
-        //         data[i].areacheck = ""
-        //     }
+            if (data[i].area == "") {
+                data[i].areacheck = "Please enter area"
+                error.area = "Please enter area"
+            } else if (!(data[i].area[0].match(alphaNumberic))) {
+                error.area = "Enter valid address"
+                data[i].areacheck = "Enter valid address"
+            }
+            else {
+                data[i].areacheck = ""
+            }
 
-        //     if (data[i].streetname == "") {
-        //         data[i].streetnamecheck = "Please enter streat name"
-        //         error.streetname = "Please enter streat name"
-        //     } else if (!(data[i].streetname[0].match(alphaNumberic))) {
-        //         error.streetname = "Enter valid streat name"
-        //         data[i].streetnamecheck = "Enter valid streat name"
-        //     }
-        //     else {
-        //         data[i].streetnamecheck = ""
-        //     }
+            if (data[i].streetname == "") {
+                data[i].streetnamecheck = "Please enter streat name"
+                error.streetname = "Please enter streat name"
+            } else if (!(data[i].streetname[0].match(alphaNumberic))) {
+                error.streetname = "Enter valid streat name"
+                data[i].streetnamecheck = "Enter valid streat name"
+            }
+            else {
+                data[i].streetnamecheck = ""
+            }
 
-        //     if (data[i].landmark == "") {
-        //         data[i].landmarkcheck = "Please enter landmark"
-        //         error.landmark = "Please enter landmark"
-        //     } else if (!(data[i].landmark[0].match(alphaNumberic))) {
-        //         error.landmark = "Enter valid landmark"
-        //         data[i].landmarkcheck = "Enter valid landmark"
-        //     }
-        //     else {
-        //         data[i].landmarkcheck = ""
-        //     }
+            if (data[i].landmark == "") {
+                data[i].landmarkcheck = "Please enter landmark"
+                error.landmark = "Please enter landmark"
+            } else if (!(data[i].landmark[0].match(alphaNumberic))) {
+                error.landmark = "Enter valid landmark"
+                data[i].landmarkcheck = "Enter valid landmark"
+            }
+            else {
+                data[i].landmarkcheck = ""
+            }
 
-        //     let regex = new RegExp(/^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/);
+            let regex = new RegExp(/^[1-9]{1}[0-9]{2}\s{0,1}[0-9]{3}$/);
 
-        //     const zipcodeNumber = data[i].zipcode.toString()
-        //     if (data[i].zipcode === "") {
-        //         data[i].zipcodecheck = "Please enter zipcode"
-        //         error.zipcode = "Please enter zipcode"
-        //     } else if (regex.test(zipcodeNumber) == false) {
-        //         error.zipcode = "Enter valid zipcode"
-        //         data[i].zipcodecheck = "Enter valid zipcode"
-        //     }
-        //     else {
-        //         data[i].zipcodecheck = ""
-        //     }
+            const zipcodeNumber = data[i].zipcode.toString()
+            if (data[i].zipcode === "") {
+                data[i].zipcodecheck = "Please enter zipcode"
+                error.zipcode = "Please enter zipcode"
+            } else if (regex.test(zipcodeNumber) == false) {
+                error.zipcode = "Enter valid zipcode"
+                data[i].zipcodecheck = "Enter valid zipcode"
+            }
+            else {
+                data[i].zipcodecheck = ""
+            }
 
-        //     if (data[i].city === "") {
-        //         error.city = "Please select city"
-        //         data[i].citycheck = "Please select city"
-        //     } else {
-        //         data[i].citycheck = ""
-        //     }
+            if (data[i].city === "") {
+                error.city = "Please select city"
+                data[i].citycheck = "Please select city"
+            } else {
+                data[i].citycheck = ""
+            }
 
-        //     if (data[i].state === "") {
-        //         error.state = "Please select state"
-        //         data[i].statecheck = "Please select state"
-        //     } else {
-        //         data[i].statecheck = ""
-        //     }
-        // }
+            if (data[i].state === "") {
+                error.state = "Please select state"
+                data[i].statecheck = "Please select state"
+            } else {
+                data[i].statecheck = ""
+            }
+        }
 
-        // setAddress(data)
+        setAddress(data)
         return error
 
     }
