@@ -47,7 +47,7 @@ const Step3 = (props) => {
 
                                                             <label style={{ marginLeft: '14px' }}>Passing Year:</label>
                                                             <div className="form-check form-check-inline">
-                                                                <select className="custom-select" value={item.passingyear[0]} name='passingyear' onChange={(e) => handleaddremove(e, index)} disabled={viewdisable ? true : false}>
+                                                                <select className="custom-select" value={item.passingyear} name='passingyear' onChange={(e) => handleaddremove(e, index)} disabled={viewdisable ? true : false}>
                                                                     <option value="2019">Passing year</option>
                                                                     <option value="2019">2019</option>
                                                                     <option value="2020">2020</option>
@@ -67,18 +67,18 @@ const Step3 = (props) => {
                                                         <label style={{ float: 'left' }}>Language Of Course:</label>
                                                         <div className="form-check form-check-inline">
 
-                                                            <input className="form-check-input" type="radio" value="english" id='english' name={`language-${index}`} onChange={(e) => handleaddremove(e, index)} checked={(data[index].language[0] === "english") ? true : false} disabled={viewdisable ? true : false} />
+                                                            <input className="form-check-input" type="radio" value="english" id='english' name={`language-${index}`} onChange={(e) => handleaddremove(e, index)} checked={(data[index].language === "english") ? true : false} disabled={viewdisable ? true : false} />
 
                                                             <label className="form-check-label">English</label>
                                                         </div>
                                                         <div className="form-check form-check-inline">
 
-                                                            <input className="form-check-input" type="radio" value="hindi" id='hindi' name={`language-${index}`} onChange={(e) => handleaddremove(e, index)} checked={(data[index].language[0] === "hindi") ? true : false} disabled={viewdisable ? true : false} />
+                                                            <input className="form-check-input" type="radio" value="hindi" id='hindi' name={`language-${index}`} onChange={(e) => handleaddremove(e, index)} checked={(data[index].language === "hindi") ? true : false} disabled={viewdisable ? true : false} />
 
                                                             <label className="form-check-label">Hindi</label>
                                                         </div>
                                                         <div className="form-check form-check-inline">
-                                                            <input className="form-check-input" type="radio" value="gujarati" id='gujarati' name={`language-${index}`} onChange={(e) => handleaddremove(e, index)} checked={(data[index].language[0] === "gujarati") ? true : false} disabled={viewdisable ? true : false} />
+                                                            <input className="form-check-input" type="radio" value="gujarati" id='gujarati' name={`language-${index}`} onChange={(e) => handleaddremove(e, index)} checked={(data[index].language === "gujarati") ? true : false} disabled={viewdisable ? true : false} />
 
                                                             <label className="form-check-label">Gujarati</label>
                                                         </div>
