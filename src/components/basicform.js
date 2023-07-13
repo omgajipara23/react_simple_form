@@ -38,6 +38,8 @@ function BasicForm(props) {
     // const { alldata, setAlldata } = UserContext();
 
     const [document, setDocument] = useState([{
+        documentname: "",
+        documentfile: ""
     }
     ])
     // console.log(document, "documenttttt");
@@ -112,16 +114,22 @@ function BasicForm(props) {
     function fileValidation(event, index) {
         let newDoc = [...document]
 
-        const demo = Object.defineProperties(newDoc[index],
-            {
-                "documentname": {
-                    value: event.target.value,
-                    writable: true
-                },
-            })
-        console.log(demo, "------------------");
 
-        setDocument([...newDoc])
+        newDoc[index] = {
+            ...newDoc[index],
+            documentname: event.target.value
+        }
+
+        // let updatedObj = newDoc.map((x, i) => {
+        //     if (i === index) {
+        //         return { ...x, [event.target.name]: event.target.value }
+        //     } else {
+        //         return x
+        //     }
+        // })
+
+        console.log(newDoc)
+        setDocument(newDoc)
     }
 
     const getBase64 = (file) => {
@@ -556,7 +564,10 @@ function BasicForm(props) {
 
     function changeImage(index) {
         const updateDocument = [...document]
-        updateDocument[index].documentfile = ""
+        updateDocument[index] = {
+            ...updateDocument[index],
+            documentfile: ''
+        }
         setDocument(updateDocument)
 
     }
