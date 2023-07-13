@@ -85,10 +85,10 @@ const listingSlice = createSlice({
         },
 
         editListingData(state, action) {
-            console.log(action.payload, "payloaddddddddddd");
+            console.log(action.payload[4].id, "payloaddddddddddd");
             let indexToBeEdited
             state.map((item, index) => {
-                if (item[4].id == +action.payload) {
+                if (item[4].id == action.payload[4].id) {
                     indexToBeEdited = index
                 }
             })
