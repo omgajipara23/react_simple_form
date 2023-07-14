@@ -24,7 +24,6 @@ const ListingTable = () => {
     const navigate = useNavigate();
     const [data, setData] = useState([])
 
-    console.log(data, "<<<=== DATA");
 
     useEffect(() => {
         const cloneListingData = [...listingData]

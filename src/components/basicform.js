@@ -41,10 +41,11 @@ function BasicForm(props) {
 
     const [document, setDocument] = useState([{
         documentname: "",
-        documentfile: ""
+        documentfile: "",
     }
     ])
-    // console.log(document, "documenttttt");
+
+
 
     const [education, setEducation] = useState([
         {
@@ -75,7 +76,6 @@ function BasicForm(props) {
         if (id != undefined) {
             const getAllDataFromLocal = [...listingData]
             if (getAllDataFromLocal.length > 0) {
-                console.log(id, "use effect idddddddddd");
                 const data = getAllDataFromLocal.filter(ele => ele[4].id == id)
                 setValues(data[0][0].basicDetails)
                 setEducation(data[0][1].allEducation)
@@ -140,7 +140,6 @@ function BasicForm(props) {
         //     }
         // })
 
-        console.log(newDoc)
         setDocument(newDoc)
     }
 
@@ -232,20 +231,24 @@ function BasicForm(props) {
     }
 
 
+
     function formSubmit(e) {
+
 
         let flag = true
 
         e.preventDefault()
+
         document.map((item, index) => {
 
+            console.log(item.documentname);
             if (item.documentname === "") {
                 let documentNameMissing = [...document]
                 documentNameMissing[index] = {
                     ...documentNameMissing[index],
                     documentnameerror: "Please select document name"
                 }
-                // documentNameMissing[index].documentnameerror = "Please select document name"
+                console.log(documentNameMissing[index]);
                 setDocument(documentNameMissing)
             }
             else {
@@ -278,45 +281,40 @@ function BasicForm(props) {
                         ...newDoc1[index],
                         fileerror: "Invalid document"
                     }
-                    // newDoc1[index].fileerror = "Invalid document"
+                    newDoc1[index].fileerror = "Invalid document"
                     setDocument(newDoc1)
-                }
-                else {
+
+                } else {
                     let newDoc1 = [...document]
                     newDoc1[index] = {
                         ...newDoc1[index],
                         fileerror: ""
                     }
-                    // newDoc1[index].fileerror = ""
+                    newDoc1[index].fileerror = ""
                     setDocument(newDoc1)
                 }
 
             }
             else {
-
-                let newDoc1 = [...document]
-                newDoc1[index] = {
-                    ...newDoc1[index],
+                let newDoc2 = [...document]
+                newDoc2[index] = {
+                    ...newDoc2[index],
                     fileerror: "Please upload document"
                 }
-                // newDoc1[index].fileerror = "Please upload document"
-                setDocument(newDoc1)
+                setDocument(newDoc2)
+
             }
 
         })
-
-        document.map((item) => {
-
+        const cloneDoc = [...document]
+        cloneDoc.map((item) => {
             if (item.fileerror || item.documentnameerror) {
                 flag = false
-            }
-            else {
-
             }
         })
 
         if (flag) {
-            setCurrentStep(6)
+            // setCurrentStep(6)
         }
 
 
@@ -336,7 +334,6 @@ function BasicForm(props) {
 
             if (id) {
                 allFormData.push({ id: id })
-                console.log(allFormData, "+++++++++++++++++++++++++++++");
                 dispatch(editListingData(allFormData))
                 // setAlldata(localData)
             } else {
@@ -722,7 +719,7 @@ function BasicForm(props) {
         const updateDocument = [...document]
         updateDocument[index] = {
             ...updateDocument[index],
-            documentfile: ''
+            documentfile: ""
         }
         setDocument(updateDocument)
 

@@ -18,7 +18,7 @@ const Step5 = (props) => {
                             </div>
 
                             {
-                                data.map((item, index) => {
+                                data && data.length > 0 && data.map((item, index) => {
                                     return (
                                         <div key={index} style={{ borderBottom: '1px solid #403d3d', marginBottom: '15px' }}>
                                             <div style={{ display: 'flex' }} >
