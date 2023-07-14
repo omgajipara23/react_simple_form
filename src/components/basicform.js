@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addListingData, editListingData } from '../store/slices/listing.slices';
+import { addDocError, addDocumentValue, addInputFileError, addInputFileValue, addMoreDocument } from '../store/slices/uploadDoc.slices';
 
 function BasicForm(props) {
     const { id } = useParams();
@@ -16,10 +17,11 @@ function BasicForm(props) {
 
     let listingData = useSelector((state) => state.listing)
 
+    let uploadDocState = useSelector((state) => state.uploadDoc)
+    console.log(uploadDocState, "redux state");
 
 
     const [error, setError] = useState({})
-
 
     const dispatch = useDispatch();
 
@@ -37,7 +39,6 @@ function BasicForm(props) {
         accountnumber: "",
     })
 
-    // const { alldata, setAlldata } = UserContext();
 
     const [document, setDocument] = useState([{
         documentname: "",
@@ -45,7 +46,9 @@ function BasicForm(props) {
     }
     ])
 
+    // const [demoState, setDemoState] = useState([{}])
 
+    // console.log(demoState, "demo state");
 
     const [education, setEducation] = useState([
         {
@@ -124,23 +127,7 @@ function BasicForm(props) {
     }
 
     function fileValidation(event, index) {
-        let newDoc = [...document]
-
-
-        newDoc[index] = {
-            ...newDoc[index],
-            documentname: event.target.value
-        }
-
-        // let updatedObj = newDoc.map((x, i) => {
-        //     if (i === index) {
-        //         return { ...x, [event.target.name]: event.target.value }
-        //     } else {
-        //         return x
-        //     }
-        // })
-
-        setDocument(newDoc)
+        dispatch(addDocumentValue([event.target.value, index]))
     }
 
     const getBase64 = (file) => {
@@ -154,13 +141,13 @@ function BasicForm(props) {
 
     async function demo(event, index) {
 
-        let test = [...document]
-        const file = event.target.files[0]
+        // let test = [...document]
 
+        // test[index][event.target.name] = baseImage
+        // setDocument(test)
+        const file = event.target.files[0]
         const baseImage = await getBase64(file)
-        console.log(event.target.name);
-        test[index][event.target.name] = baseImage
-        setDocument(test)
+        dispatch(addInputFileValue([baseImage, index]))
     }
 
 
@@ -234,35 +221,26 @@ function BasicForm(props) {
 
     function formSubmit(e) {
 
-
         let flag = true
 
         e.preventDefault()
 
-        document.map((item, index) => {
+        uploadDocState.map((item, index) => {
 
-            console.log(item.documentname);
-            if (item.documentname === "") {
-                let documentNameMissing = [...document]
-                documentNameMissing[index] = {
-                    ...documentNameMissing[index],
-                    documentnameerror: "Please select document name"
-                }
-                console.log(documentNameMissing[index]);
-                setDocument(documentNameMissing)
-            }
-            else {
-                let documentNameMissing1 = [...document]
-                documentNameMissing1[index] = {
-                    ...documentNameMissing1[index],
-                    documentnameerror: ""
-                }
-                // documentNameMissing1[index].documentnameerror = ""
-                setDocument(documentNameMissing1)
+
+            if (item.documentname == '') {
+
+                console.log(" in ifff");
+                dispatch(addDocError([index, false]))
+
+            } else {
+                console.log("in else");
+                dispatch(addDocError(index))
             }
 
             if (item.documentfile.length > 0) {
-                var str = item.documentfile;
+
+                var str = item.documentfile[0];
                 var patternArr = ['data:image/jpeg', 'data:image/png'];
 
                 function contains(target, pattern) {
@@ -276,37 +254,21 @@ function BasicForm(props) {
                 const fileIsValidOrNot = contains(str, patternArr)
 
                 if (fileIsValidOrNot === false) {
-                    let newDoc1 = [...document]
-                    newDoc1[index] = {
-                        ...newDoc1[index],
-                        fileerror: "Invalid document"
-                    }
-                    newDoc1[index].fileerror = "Invalid document"
-                    setDocument(newDoc1)
 
-                } else {
-                    let newDoc1 = [...document]
-                    newDoc1[index] = {
-                        ...newDoc1[index],
-                        fileerror: ""
-                    }
-                    newDoc1[index].fileerror = ""
-                    setDocument(newDoc1)
+                    dispatch(addInputFileError([index, false]))
                 }
+                else {
 
-            }
-            else {
-                let newDoc2 = [...document]
-                newDoc2[index] = {
-                    ...newDoc2[index],
-                    fileerror: "Please upload document"
+                    dispatch(addInputFileError([index, true]))
                 }
-                setDocument(newDoc2)
-
+            } else {
+                dispatch(addInputFileError(index))
             }
-
         })
-        const cloneDoc = [...document]
+
+
+
+        const cloneDoc = [...uploadDocState]
         cloneDoc.map((item) => {
             if (item.fileerror || item.documentnameerror) {
                 flag = false
@@ -321,7 +283,6 @@ function BasicForm(props) {
         let allFormData = [{ basicDetails: values }, { allEducation: education }, { finalAddress: address }, { allDocument: document }]
 
 
-        // let localData = alldata
 
 
         if (listingData.length == 0) {
@@ -331,23 +292,22 @@ function BasicForm(props) {
 
         } else {
 
-
             if (id) {
                 allFormData.push({ id: id })
                 dispatch(editListingData(allFormData))
-                // setAlldata(localData)
             } else {
                 const id = listingData.length
                 const updateId = id + 1
                 allFormData.push({ id: updateId })
                 dispatch(addListingData(allFormData))
-                // localData.push(allFormData)
-                // setAlldata(localData)
+
             }
 
         }
 
     }
+
+
 
     function fileHandel(event, index) {
         let newform = [...education]
@@ -368,8 +328,10 @@ function BasicForm(props) {
             documentname: "",
             documentfile: ""
         }
-        const docAdd = [...document, newDoc]
-        setDocument(docAdd)
+        // const docAdd = [...uploadDocState, newDoc]
+        // setDocument(docAdd)
+        dispatch(addMoreDocument(newDoc))
+
     }
 
     function step1Validation(values) {
@@ -779,7 +741,7 @@ function BasicForm(props) {
         case 5:
             return (
                 <Step5
-                    data={document}
+                    data={uploadDocState}
                     addDocument={addDocument}
                     fileValidation={fileValidation}
                     demo={demo}

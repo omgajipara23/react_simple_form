@@ -25,7 +25,7 @@ const Step5 = (props) => {
                                                 <label>Select Document:</label>
 
                                                 <div className="form-check form-check-inline">
-                                                    <select className="custom-select" value={item.documentname} name='documentname' onChange={(e) => fileValidation(e, index)} disabled={viewdisable ? true : false}>
+                                                    <select className="custom-select" value={item.documentname} name='documentname' onChange={(e) => { fileValidation(e, index) }} disabled={viewdisable ? true : false}>
                                                         <option>Select Document</option>
                                                         <option value="adharcard">Adhar Card</option>
                                                         <option value="passbook">Passbook</option>
@@ -65,7 +65,7 @@ const Step5 = (props) => {
                             </Button>
                             <br></br>
                             <Button onClick={back} variant="dark" style={{ marginRight: '10px' }}>Back</Button>
-                            <Button onClick={next} variant="success" type="submit" disabled={viewdisable ? true : false}>Submit</Button>
+                            <Button onClick={(event) => { next(event) }} variant="success" type="submit" disabled={viewdisable ? true : false}>Submit</Button>
 
                         </fieldset>
 
@@ -73,7 +73,7 @@ const Step5 = (props) => {
                     </div>
                 </div >
             </form >
-        </div>
+        </div >
     );
 };
 export default Step5;
