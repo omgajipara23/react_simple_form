@@ -39,6 +39,9 @@ function BasicForm(props) {
         accountnumber: "",
     })
 
+    const [flag, setFlag] = useState(true)
+
+    const [completed, setCompleted] = useState(false)
 
     const [document, setDocument] = useState([{
         documentname: "",
@@ -72,6 +75,7 @@ function BasicForm(props) {
         }
     ])
 
+    const [formSub, setFormSub] = useState(false)
 
     useEffect(() => {
 
@@ -87,6 +91,13 @@ function BasicForm(props) {
             }
         }
     }, [])
+
+    useEffect(() => {
+        if (completed === true && flag === true) {
+            console.log({ completed, flag });
+            setCurrentStep(6)
+        }
+    }, [completed])
 
     function addAddress() {
         const addField = {
@@ -217,6 +228,38 @@ function BasicForm(props) {
         setValues(newobj)
     }
 
+    useEffect(() => {
+
+
+
+        console.log({ formSub });
+        function step5Validation() {
+            console.log({ formSub });
+            if (formSub) {
+                console.log({ uploadDocState });
+                const cloneDoc = [...uploadDocState]
+                const cloneLength = cloneDoc.length
+                cloneDoc.map((item, index) => {
+                    console.log("asgasdfasghdjhasdjhfasd", item);
+                    console.log(item.fileerror, item.documentnameerror);
+                    if (item.docNameError || item.fileError) {
+                        setFlag(false)
+                        console.log("=====");
+                    }
+                    if (index + 1 == cloneLength) {
+                        setCompleted(true)
+                    }
+
+                })
+            }
+        }
+
+        step5Validation()
+
+
+    }, [formSub])
+
+
 
 
     function formSubmit(e) {
@@ -268,16 +311,22 @@ function BasicForm(props) {
 
 
 
-        const cloneDoc = [...uploadDocState]
-        cloneDoc.map((item) => {
-            if (item.fileerror || item.documentnameerror) {
-                flag = false
-            }
-        })
+        // const cloneDoc = [...uploadDocState]
+        // const cloneLength = cloneDoc.length
+        // cloneDoc.map((item, index) => {
 
-        if (flag) {
-            // setCurrentStep(6)
-        }
+        //     if (item.fileerror || item.documentnameerror) {
+        //         setFlag(false)
+        //     }
+        //     if (index + 1 == cloneLength) {
+        //         setCompleted(true)
+        //     }
+
+        // })
+
+        // if (flag) {
+        //     // setCurrentStep(6)
+        // }
 
 
         let allFormData = [{ basicDetails: values }, { allEducation: education }, { finalAddress: address }, { allDocument: document }]
@@ -304,6 +353,8 @@ function BasicForm(props) {
             }
 
         }
+
+        setFormSub(true)
 
     }
 
