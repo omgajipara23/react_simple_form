@@ -33,7 +33,7 @@ const Step5 = (props) => {
                                                     </select>
                                                     <div>
                                                         {
-                                                            data[index].documentnameerror ? <p style={{ color: 'red' }}>{data[index].documentnameerror}</p> : null
+                                                            data[index].docNameError ? <p style={{ color: 'red' }}>{data[index].docNameError}</p> : null
                                                         }
                                                     </div>
                                                 </div>
@@ -47,7 +47,7 @@ const Step5 = (props) => {
 
                                                     <div>
                                                         {
-                                                            data[index].fileerror ? <p style={{ color: 'red' }}>{data[index].fileerror}</p> : null
+                                                            data[index].fileError ? <p style={{ color: 'red' }}>{data[index].fileError}</p> : null
                                                         }
                                                     </div>
                                                 </div>

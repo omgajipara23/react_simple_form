@@ -47,9 +47,35 @@ const uploadDocSlice = createSlice({
             } else {
                 state[action.payload].fileError = "Please Select File"
             }
+        },
+
+        imgChange(state, action) {
+            state.map((item, index) => {
+                if (index == action.payload) {
+                    state[action.payload].documentfile = ""
+                }
+            })
+        },
+
+        removeAllDataFromState(state, action) {
+            state.length = 0
+            const obj = {
+                documentname: "",
+                documentfile: ""
+            }
+            state.push(obj)
+        },
+
+        setAllDocumentData(state, action) {
+            state.length = 0
+            const payload = action.payload
+            payload.map((item) => {
+                state.push(item)
+            })
         }
+
     }
 })
 
 export default uploadDocSlice.reducer
-export const { addMoreDocument, addDocumentValue, addDocError, addInputFileValue, addInputFileError } = uploadDocSlice.actions
+export const { addMoreDocument, setAllDocumentData, imgChange, removeAllDataFromState, addDocumentValue, addDocError, addInputFileValue, addInputFileError } = uploadDocSlice.actions

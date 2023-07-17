@@ -197,7 +197,7 @@ const ListingTable = () => {
                                 <tr className="spacer"><td colSpan="100"></td></tr>
                                 {
                                     data.map((item, index) => {
-
+                                        // console.log(uploadDocState[0].documentfile, "localllllllll");
                                         return (
 
                                             < tr key={index}>

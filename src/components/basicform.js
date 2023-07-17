@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addListingData, editListingData } from '../store/slices/listing.slices';
-import { addDocError, addDocumentValue, addInputFileError, addInputFileValue, addMoreDocument } from '../store/slices/uploadDoc.slices';
+import { addDocError, addDocumentValue, addInputFileError, addInputFileValue, addMoreDocument, imgChange, removeAllDataFromState, setAllDocumentData } from '../store/slices/uploadDoc.slices';
 
 function BasicForm(props) {
     const { id } = useParams();
@@ -18,7 +18,6 @@ function BasicForm(props) {
     let listingData = useSelector((state) => state.listing)
 
     let uploadDocState = useSelector((state) => state.uploadDoc)
-    console.log(uploadDocState, "redux state");
 
 
     const [error, setError] = useState({})
@@ -43,15 +42,6 @@ function BasicForm(props) {
 
     const [completed, setCompleted] = useState(false)
 
-    const [document, setDocument] = useState([{
-        documentname: "",
-        documentfile: "",
-    }
-    ])
-
-    // const [demoState, setDemoState] = useState([{}])
-
-    // console.log(demoState, "demo state");
 
     const [education, setEducation] = useState([
         {
@@ -82,22 +72,66 @@ function BasicForm(props) {
 
         if (id != undefined) {
             const getAllDataFromLocal = [...listingData]
+            getAllDataFromLocal.map((item, index) => {
+                if (id == item[4].id) {
+                    dispatch(setAllDocumentData(item[3].allDocument))
+                }
+            })
             if (getAllDataFromLocal.length > 0) {
                 const data = getAllDataFromLocal.filter(ele => ele[4].id == id)
                 setValues(data[0][0].basicDetails)
                 setEducation(data[0][1].allEducation)
                 setAddress(data[0][2].finalAddress)
-                setDocument(data[0][3].allDocument)
+                // setDocument(data[0][3].allDocument)
             }
         }
     }, [])
 
     useEffect(() => {
+        console.log(completed, "===============", flag);
         if (completed === true && flag === true) {
-            console.log({ completed, flag });
+
             setCurrentStep(6)
+            dispatch(removeAllDataFromState(true))
         }
     }, [completed])
+
+
+
+    useEffect(() => {
+        let tempSubmit = []
+        function step5Validation() {
+            if (formSub) {
+                const cloneDoc = [...uploadDocState]
+                cloneDoc.map((item, index) => {
+                    console.log(item, "item");
+                    if (item.docNameError || item.fileError) {
+                        setFlag(false)
+                        setFormSub(false)
+                        tempSubmit.push(false)
+                    }
+                    else {
+                        tempSubmit.push(true)
+                    }
+                })
+
+                const checkAll = tempSubmit.every(checkTrue)
+                function checkTrue(x) {
+                    return x === true
+                }
+
+                if (checkAll === true) {
+                    setCompleted(true)
+                    setFlag(true)
+                }
+            }
+        }
+
+        step5Validation()
+
+
+    }, [formSub])
+
 
     function addAddress() {
         const addField = {
@@ -228,43 +262,10 @@ function BasicForm(props) {
         setValues(newobj)
     }
 
-    useEffect(() => {
-
-
-
-        console.log({ formSub });
-        function step5Validation() {
-            console.log({ formSub });
-            if (formSub) {
-                console.log({ uploadDocState });
-                const cloneDoc = [...uploadDocState]
-                const cloneLength = cloneDoc.length
-                cloneDoc.map((item, index) => {
-                    console.log("asgasdfasghdjhasdjhfasd", item);
-                    console.log(item.fileerror, item.documentnameerror);
-                    if (item.docNameError || item.fileError) {
-                        setFlag(false)
-                        console.log("=====");
-                    }
-                    if (index + 1 == cloneLength) {
-                        setCompleted(true)
-                    }
-
-                })
-            }
-        }
-
-        step5Validation()
-
-
-    }, [formSub])
-
-
-
 
     function formSubmit(e) {
 
-        let flag = true
+        // let flag = true
 
         e.preventDefault()
 
@@ -273,17 +274,17 @@ function BasicForm(props) {
 
             if (item.documentname == '') {
 
-                console.log(" in ifff");
+
                 dispatch(addDocError([index, false]))
 
             } else {
-                console.log("in else");
+
                 dispatch(addDocError(index))
             }
 
             if (item.documentfile.length > 0) {
 
-                var str = item.documentfile[0];
+                var str = item.documentfile;
                 var patternArr = ['data:image/jpeg', 'data:image/png'];
 
                 function contains(target, pattern) {
@@ -297,11 +298,9 @@ function BasicForm(props) {
                 const fileIsValidOrNot = contains(str, patternArr)
 
                 if (fileIsValidOrNot === false) {
-
                     dispatch(addInputFileError([index, false]))
                 }
                 else {
-
                     dispatch(addInputFileError([index, true]))
                 }
             } else {
@@ -329,7 +328,7 @@ function BasicForm(props) {
         // }
 
 
-        let allFormData = [{ basicDetails: values }, { allEducation: education }, { finalAddress: address }, { allDocument: document }]
+        let allFormData = [{ basicDetails: values }, { allEducation: education }, { finalAddress: address }, { allDocument: uploadDocState }]
 
 
 
@@ -729,12 +728,7 @@ function BasicForm(props) {
 
 
     function changeImage(index) {
-        const updateDocument = [...document]
-        updateDocument[index] = {
-            ...updateDocument[index],
-            documentfile: ""
-        }
-        setDocument(updateDocument)
+        dispatch(imgChange(index))
 
     }
 
